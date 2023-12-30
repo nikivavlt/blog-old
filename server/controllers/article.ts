@@ -1,4 +1,4 @@
-import { database } from '../configurationsd/database.js'
+import { database } from '../configurations/database.js'
 import jwt from 'jsonwebtoken'
 
 export const getArticles = (request, response) => {

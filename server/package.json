@@ -1,9 +1,9 @@
 {
-  "name": "api",
-  "version": "2.0.0",
+  "name": "server",
+  "version": "3.0.0",
   "author": "nikivavlt",
-  "description": "Web application development using Express.",
-  "main": "index.js",
+  "description": "Web application development using Node.js.",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "build": "tsc --watch",
