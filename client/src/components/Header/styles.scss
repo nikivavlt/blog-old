@@ -1,0 +1,103 @@
+@import 'styles/variables/index';
+
+// Header
+header {
+    position: fixed;
+    width: 100%;
+
+    & > div {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    & > div > div {
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    display: flex;
+    justify-content: space-between;
+
+    input[type="text"] {
+        background-color: hsl(225, 70%, 96%);
+
+        &:focus {
+            outline-color: hsl(189, 34%, 88%);
+        }
+    }
+
+    input[type="text"],
+    button {
+        padding: 0.3rem;
+        border: none;
+    }
+
+    button {
+        width: 1.7rem;
+        background-color: $colorBlue;
+        border-radius: 0.2rem;
+    }
+
+    .search-bar {
+        background-color: hsl(189, 34%, 88%);
+        border: 1px solid hsl(189, 34%, 88%);
+        border-radius: 0.3rem;
+    }
+    // button {
+    //     float: right;
+    //     padding: 6px 10px;
+    //     margin-top: 8px;
+    //     margin-right: 16px;
+    //     background: #ddd;
+    //     font-size: 17px;
+    //     border: none;
+    //     cursor: pointer;
+    // }
+
+    // button:hover {
+    //     background: #ccc;
+    // }
+}
+
+// .header {
+//     .container {
+//         padding: 10px 0px;
+//         display: flex;
+//         align-items: center;
+//         justify-content: space-between;
+
+//         .links {
+//             display: flex;
+//             align-items: center;
+//             gap: 10px;
+
+//             .link {
+//                 text-decoration: none;
+//                 color: inherit;
+
+//                 h4 {
+//                     font-size: 16px;
+//                     font-weight: 300;
+//                 }
+//             }
+
+//             span {
+//                 color: purple;
+//                 cursor: pointer;
+//             }
+//         }
+//     }
+// }
+
+// Footer
+footer {
+    margin-top: 100px;
+    padding: 20px;
+    background-color: $lightGreen;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+}
