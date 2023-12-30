@@ -37,7 +37,7 @@ app.use(cookieParser());
 // Routes
 // app.use(authMiddleware) instead before routes when middleware should work because it works like a waterfall
 // OR app.use(verifyJWT);
-app.all('*', authMiddleware);
+// app.all('*', authMiddleware);
 
 app.use('/auth', authRoutes);
 app.use('/refresh', refreshRoute);

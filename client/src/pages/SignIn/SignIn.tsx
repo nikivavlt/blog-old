@@ -43,9 +43,9 @@ const SignIn = (): JSX.Element => {
       // }
       // errRef.current.focus();
       // }
-  }
+    }
 
-  return (
+    return (
     <div className='sign-in'>
       <h1>Sign in</h1>
 
@@ -66,7 +66,8 @@ const SignIn = (): JSX.Element => {
         </span>
       </form>
     </div>
-  )
+    )
+  }
 }
 
 export default SignIn

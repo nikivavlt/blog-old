@@ -10,7 +10,7 @@
     "overrides": [
     ],
     "parserOptions": {
-        "project": "./tsconfig.json",
+        "project": "./client/tsconfig.json",
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
