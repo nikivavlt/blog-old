@@ -9,41 +9,31 @@ const signIn = (request, response) => {
   const { username: requestUsername, password: requestPassword } = request.body;
 
   User.getUserByName(requestUsername, (error, data) => {
-    if (error !== null) throw error;
-
-    const newObject = { ...data };
-
-    newObject['refresh_token'] = 'test';
-
-    new User(newObject).updateUser((error, data) => {
-      console.log(error);
-      console.log(data);
-    });
-  });
-
-  const query = 'SELECT * FROM users WHERE username = ?';
-
-  database.query(query, [request.body.username], (error, data) => {
-
     if (error !== null) return response.json(error);
 
-    if (data.length === 0) return response.status(404).json('User not found.');
+    if (!data) return response.status(404).json('User not found.'); // 401 instead?
 
-    const { username: databaseUsername, password: databasePassword, role: databaseRole } = data[0];
-
+    const { id: databaseUserId, username: databaseUsername, password: databasePassword, role: databaseRole } = data;
 
     const isPasswordCorrect = bcrypt.compareSync(requestPassword, databasePassword);
 
-    if (!isPasswordCorrect) return response.status(401).json('Wrong password');
+    // isPasswordsEqual
+    if (!isPasswordCorrect) return response.status(401).json('Wrong password.');
 
-    const accessToken = generateAccessToken(databaseUsername, databaseRole);
-    const refreshToken = generateRefreshToken(databaseUsername);
-    // const query = 'UPDATE users SET refresh_token = ? WHERE username = ?';
+    const newObject = { ...data };
 
-    // database.query(query, [refreshToken, requestUsername], (error, data) => {
-    // });
+    const refreshToken = generateRefreshToken(databaseUserId, databaseUsername, databaseRole);
 
-    response.cookie('refresh_token', refreshToken, {
+    newObject['refresh_token'] = refreshToken;
+
+    // move this to Token service - saveRefreshToken
+    new User(newObject).updateUser((error, data) => {
+      if (error !== null) return response.json(error);
+    });
+
+    // also add to service and function to verifyToken
+    const accessToken = generateAccessToken(databaseUserId, databaseUsername, databaseRole);
+    return response.cookie('refresh_token', refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'None',

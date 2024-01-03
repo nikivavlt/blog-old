@@ -3,13 +3,14 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const generateAccessToken = (username: string, role: string): string => {
-  const token = jwt.sign({ username, role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+// generate random key and add additional data for token creation (id + smth..)
+const generateAccessToken = (id: number, username: string, role: string): string => {
+  const token = jwt.sign({ id, username, role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
   return token;
 };
 
-const generateRefreshToken = (username: string): string => {
-  const token = jwt.sign({ username }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
+const generateRefreshToken = (id: number, username: string, role: string): string => {
+  const token = jwt.sign({ id, username, role }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
   return token;
 };
 

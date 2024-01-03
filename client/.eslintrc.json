@@ -10,7 +10,7 @@
     "overrides": [
     ],
     "parserOptions": {
-        "project": "./client/tsconfig.json",
+        "project": "./tsconfig.json",
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
@@ -18,5 +18,7 @@
         "react"
     ],
     "rules": {
+        "@typescript-eslint/semi": "off",
+        "semi": ["error", "always"]
     }
 }

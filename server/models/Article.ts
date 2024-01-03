@@ -32,6 +32,7 @@ class Article {
     this.updatedAt = article.updatedAt;
   }
 
+  // remove * from ALL QUERIES!!!
   static getArticles = (callback: (error: any, data: IArticle[] | null) => void, categoryName: string = ''): void => {
     const defaultQuery = 'SELECT a.*, c.name as category FROM articles a JOIN categories c ON a.category_id = c.id';
     const categoryQuery = 'SELECT a.*, c.name as category FROM articles a JOIN categories c ON a.category_id = c.id WHERE c.name = ?';

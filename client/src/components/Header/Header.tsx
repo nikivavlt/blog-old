@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom'
 import Logotype from 'assets/images/logotype.svg'
 
 import './styles.scss'
+import { setToken } from 'store/actions/token'
 
 const Header = (): JSX.Element => {
   const { currentUser, signOut } = useContext(AuthContext)
-
   return (
     <header>
       <div>

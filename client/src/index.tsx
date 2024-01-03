@@ -11,13 +11,13 @@ const root = ReactDOM.createRoot(
 )
 
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <AuthContextProvider>
       <Provider store={store}>
         <App />
       </Provider>
     </AuthContextProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 )
 
 // DELETE NOT NECESSARY DEPENDENCIES , WEB VITALS...

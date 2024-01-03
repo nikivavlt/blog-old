@@ -8,7 +8,7 @@ import authRoutes from './routes/auth.js';
 import refreshRoute from './routes/refresh.js';
 import usersRoutes from './routes/users.js';
 import articlesRoutes from './routes/articles.js';
-import authMiddleware from './middlewares/auth-middleware.js';
+import authMiddleware from './middlewares/authentication.js';
 import corsOptions from './configurations/cors.js';
 
 // absolute paths ? shortcut
@@ -20,7 +20,6 @@ const port = process.env.SERVER_PORT ?? 8800;
 const app = express();
 
 // app.use(logger);
-// app.use(credentials)
 
 app.use(cors(corsOptions));
 
@@ -35,13 +34,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Routes
-// app.use(authMiddleware) instead before routes when middleware should work because it works like a waterfall
-// OR app.use(verifyJWT);
-// app.all('*', authMiddleware);
-
 app.use('/auth', authRoutes);
 app.use('/refresh', refreshRoute);
 
+app.use(authMiddleware);
 app.use('/users', usersRoutes);
 app.use('/articles', articlesRoutes);
 

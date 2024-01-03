@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { getArticles } from 'store/actions/article'
-import type IArticle from 'models/article'
-import type { Dispatch } from 'redux'
-import type { IState } from 'store/store'
-import type { IDispatch } from 'store/actions/article'
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { getArticles } from 'store/actions/article';
+import type IArticle from 'models/article';
+import type { Dispatch } from 'redux';
+import type { IState } from 'store/store';
+import type { IDispatch } from 'store/actions/article';
 
-import './styles.scss'
+import './styles.scss';
 
 interface IStateProps {
   articles: IArticle[]
@@ -20,17 +20,17 @@ interface IDispatchProps {
 interface IProps extends IStateProps, IDispatchProps {}
 
 const Articles = ({ articles, getArticles }: IProps): JSX.Element => {
-  const [currentArticles, setCurrentArticles] = useState<IArticle[]>([])
+  const [currentArticles, setCurrentArticles] = useState<IArticle[]>([]);
 
-  const category = useLocation().search
-
-  useEffect(() => {
-    getArticles(category)
-  }, [category])
+  const category = useLocation().search;
 
   useEffect(() => {
-    setCurrentArticles(articles)
-  }, [articles])
+    getArticles(category);
+  }, [category]);
+
+  useEffect(() => {
+    setCurrentArticles(articles);
+  }, [articles]);
 
   return (
     <div>Articles (list-of-articles.component.tsx)
@@ -62,19 +62,19 @@ const Articles = ({ articles, getArticles }: IProps): JSX.Element => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state: IState): IStateProps => {
-  const { articles } = state
+  const { articles } = state;
 
   return {
     articles
-  }
-}
+  };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch): IDispatchProps => ({
   getArticles: (category: string) => dispatch(getArticles(category))
-})
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Articles)
+export default connect(mapStateToProps, mapDispatchToProps)(Articles);

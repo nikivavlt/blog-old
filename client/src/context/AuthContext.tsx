@@ -1,6 +1,8 @@
 import React, { type ReactNode, createContext, useEffect, useState } from 'react'
 
 import UserService from 'services/user'
+import { setToken } from 'store/actions/token'
+import store from 'store/store'
 import http from 'utils/axios'
 
 export const AuthContext = createContext<any>({})
@@ -14,23 +16,41 @@ export const AuthContextProvider = ({ children }: Props): JSX.Element => {
 
   http.interceptors.response.use((response) => response,
     async (error) => {
-      if (error.response.status === 401) {
-        setCurrentUser(null)
-        return await http(error.config)
-        // return await http.request(error.config)
+      const { dispatch } = store
+      const originalRequest = error.config
+      if (error.response.status === 401 && originalRequest && !originalRequest._isRetry) {
+        originalRequest._isRetry = true;
+        try {
+          const response = await http.post('/refresh');
+
+          const { newAccessToken } = response.data;
+          dispatch(setToken(newAccessToken));
+          return await http.request(originalRequest);
+        } catch (error) {
+          console.log(error);
+        }
+        setCurrentUser(null);
+        // OR await signOut(); SO THEN cleancookie not necessary in backend
       }
     })
 
   const signIn = async (inputs: { username: string, password: string }): Promise<void> => {
     const { username, password } = inputs
 
-    const responseData = await UserService.signIn(username, password)
+    const responseData = await UserService.signIn(username, password);
 
-    setCurrentUser(responseData)
+    const { token, ...otherData } = responseData;
+
+    setCurrentUser(otherData);
+
+    return responseData;
   }
 
-  const signOut = async (inputs: { username: string, password: string }): Promise<void> => {
-    await UserService.signOut(inputs.username, inputs.password)
+  const signOut = async (): Promise<void> => {
+    await UserService.signOut()
+    const { dispatch } = store;
+
+    dispatch(setToken(null))
 
     setCurrentUser(null)
   }

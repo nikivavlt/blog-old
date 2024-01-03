@@ -5,8 +5,9 @@ const corsOptions = {
   allowedHeaders: [
     'Content-Type',
     'Authorization',
-    'Access-Control-Allow-Credentials'
+    'Access-Control-Allow-Credentials',
+    'Access-Control-Allow-Origin'
   ]
-}
+};
 
-export default corsOptions
+export default corsOptions;

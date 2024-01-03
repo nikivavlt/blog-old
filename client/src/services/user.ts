@@ -9,8 +9,8 @@ class UserService {
     return response.data
   }
 
-  async signOut (username: string, password: string): Promise<void> {
-    await http.post('/auth/signout', [username, password])
+  async signOut (): Promise<void> {
+    await http.post('/auth/signout')
   }
 
   async signUp (username: string, email: string, password: string): Promise<void> {

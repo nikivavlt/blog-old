@@ -37,12 +37,12 @@ export const getArticles = (request, response) => {
 }
 
 export const getArticle = (request, response) => {
-  const query = 'SELECT `username` as author, u.id as author_id, `title`, `description`, `url`, a.id, a.image, u.image AS authorImage, c.name AS category, `date` FROM users u JOIN articles a ON u.id=a.author_id JOIN categories c ON a.category_id=c.id WHERE a.url = ?'
+  const query = 'SELECT `username` as author, u.id as author_id, `title`, `description`, `url`, a.id, a.image, u.image AS authorImage, c.name AS category, `created_at` FROM users u JOIN articles a ON u.id=a.author_id JOIN categories c ON a.category_id=c.id WHERE a.url = ?'
   // check if article id required - send 400
   // if (!req?.body?.id) return res.status(400).json({ 'message': 'Employee ID required.' });
 
   database.query(query, [request.params.url], (error, data) => {
-    if (error) return response.status(500).send(error)
+    if (error) return response.status(500).send(error);
     // 204 instead
   //   if (!employee) {
   //     return res.status(204).json({ "message": `No employee matches ID ${req.body.id}.` });
@@ -111,14 +111,14 @@ export const addArticle = (request, response) => {
 }
 
 export const deleteArticle = (request, response) => {
-  const token = request.cookies.access_token
+  const token = request.cookies.refresh_token
 
-  if (!token) return response.status(401).json('Not authenticated!')
+  if (!token) return response.status(401).json('Not authenticated!') // CHANGE STATUS CODE
 
-  jwt.verify(token, 'jwt', (error, userData) => {
+  jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (error, userData) => {
     if (error) return response.status(403).json('Token is not valid!')
 
-    const url = request.params.url
+    const url = request.params.url;
 
     // check if id provided - send 400
 
@@ -135,13 +135,13 @@ export const deleteArticle = (request, response) => {
 }
 
 export const updateArticle = (request, response) => {
-  const token = request.cookies.access_token
+  const token = request.cookies.refresh_token
   // check if ID provided
 
   if (!token) return response.status(401).json('Not authenticated!')
 
   // add service here or middleware instead
-  jwt.verify(token, 'jwt', (error, userData) => {
+  jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (error, userData) => {
     if (error) return response.status(403).json('Token is not valid!')
 
     const postId = request.params.id

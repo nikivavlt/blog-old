@@ -36,11 +36,11 @@ const SingleArticle = (): JSX.Element => {
 
   const handleDelete = async (): Promise<void> => {
     try {
-      await ArticleService.deleteArticle(articleUrl)
+      await ArticleService.deleteArticle(articleUrl);
 
-      navigate('/')
+      navigate('/');
     } catch (error) {
-      console.log(error)
+      console.log(error);
       // Make redirection to error page?
     }
   }
@@ -60,7 +60,7 @@ const SingleArticle = (): JSX.Element => {
             <Link to={`/editor?edit=${article.url}`} state={article}>
               <img src={require('../../assets/images/edit.png')} alt="Edit button" />
             </Link>
-            <img onClick={() => handleDelete} src={require('../../assets/images/delete.png')} alt="Delete button" />
+            <img onClick={handleDelete} src={require('../../assets/images/delete.png')} alt="Delete button" />
           </div>}
         </div>
         <p>

@@ -81,8 +81,6 @@ const SignUp = (): JSX.Element => {
     }
   }
 
-  console.log(values)
-
   return (
     <div className='sign-up'>
       <h1>Sign up</h1>

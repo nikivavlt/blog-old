@@ -5,6 +5,10 @@
   "author": "nikivavlt",
   "description": "Web application development using React.",
   "private": true,
+  "scripts": {
+    "build": "react-scripts build",
+    "start": "react-scripts start"
+  },
   "dependencies": {
     "@types/node": "^16.18.39",
     "@types/react": "^18.2.18",
@@ -16,27 +20,6 @@
     "react-router-dom": "^6.14.2",
     "react-scripts": "5.0.1",
     "redux": "^4.2.1"
-  },
-  "scripts": {
-    "build": "react-scripts build",
-    "start": "react-scripts start"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
@@ -56,5 +39,17 @@
     "stylelint-scss": "^5.0.1",
     "typescript": "^5.1.6"
   },
-  "proxy": "http://localhost:8800/"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "proxy": "http://localhost:8080/"
 }
