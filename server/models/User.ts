@@ -1,4 +1,4 @@
-import { database } from '../configurations/database.js';
+import { database } from '../config/database.js';
 
 class User {
   id: number;

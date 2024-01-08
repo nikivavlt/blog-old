@@ -5,7 +5,6 @@ import Footer from 'components/Footer'
 import Header from 'components/Header/Header'
 import UserService from 'services/user'
 import { AuthContext } from 'context/AuthContext'
-import http from 'utils/axios'
 
 const Layout = (): JSX.Element => {
   // const location = useLocation()

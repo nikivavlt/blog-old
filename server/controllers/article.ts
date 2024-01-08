@@ -1,6 +1,9 @@
-import { database } from '../configurations/database.js'
+import { database } from '../config/database.js'
 import jwt from 'jsonwebtoken'
 
+
+// SINGLE TASK FOR FUNCTION
+// In JavaScript && operator returns the first value if it's falsy or the second one if not.
 export const getArticles = (request, response) => {
 
   const { category } = request.query;
@@ -37,6 +40,7 @@ export const getArticles = (request, response) => {
 }
 
 export const getArticle = (request, response) => {
+  console.log(request.headers)
   const query = 'SELECT `username` as author, u.id as author_id, `title`, `description`, `url`, a.id, a.image, u.image AS authorImage, c.name AS category, `created_at` FROM users u JOIN articles a ON u.id=a.author_id JOIN categories c ON a.category_id=c.id WHERE a.url = ?'
   // check if article id required - send 400
   // if (!req?.body?.id) return res.status(400).json({ 'message': 'Employee ID required.' });
@@ -71,7 +75,7 @@ export const addArticle = (request, response) => {
     // rename image as avatar
 
     const query = 'INSERT INTO articles(`title`, `description`, `image`, `category_id`, `date`, `author_id`) VALUES (?)'
-
+    // desctructure request.body object since you will use model instead this
     const values = [
       request.body.title,
       request.body.description,

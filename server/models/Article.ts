@@ -1,15 +1,13 @@
 import database from '../config/database.js';
 import type IArticle from '../interfaces/article.js';
 
-
-// OR 
+// OR
 // const Employee = function(employee) {
 //   this.designation = employee.designation;
 //   this.doj = employee.doj;
 //   this.name = employee.name;
 //   this.salary = employee.salary;
 // };
-
 
 class Article {
   title: string;
@@ -37,8 +35,8 @@ class Article {
     const defaultQuery = 'SELECT a.*, c.name as category FROM articles a JOIN categories c ON a.category_id = c.id';
     const categoryQuery = 'SELECT a.*, c.name as category FROM articles a JOIN categories c ON a.category_id = c.id WHERE c.name = ?';
 
-    const query = categoryName === '' 
-      ? defaultQuery 
+    const query = categoryName === ''
+      ? defaultQuery
       : categoryQuery;
 
     database.query<IArticle[]>(query, [categoryName], (error, data) => {
@@ -51,18 +49,20 @@ class Article {
 
     createArticle = (callback) => {
       const query = 'INSERT INTO articles(`title`, `description`, `image`, `url`, `category_id`, `author_id`, `created_at`, `updated_at`) VALUES (?)';
-  
+
       const { createArticle, ...rest } = this;
-  
+
       database.query(query, [Object.values(rest)], (error, data) => {
         if (error) {
           callback(error, null);
           return;
         }
-  
+        // First argument in callback represents an error.
+        // If no error occurred, the first argument should be null by convention in Node.js.
         callback(null, data);
       });
+    };
   };
-};
+}
 
 export default Article;

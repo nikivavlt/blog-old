@@ -3,7 +3,6 @@ import React, { type ReactNode, createContext, useEffect, useState } from 'react
 import UserService from 'services/user'
 import { setToken } from 'store/actions/token'
 import store from 'store/store'
-import http from 'utils/axios'
 
 export const AuthContext = createContext<any>({})
 
@@ -12,27 +11,7 @@ interface Props {
 }
 
 export const AuthContextProvider = ({ children }: Props): JSX.Element => {
-  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('user')) || null)
-
-  http.interceptors.response.use((response) => response,
-    async (error) => {
-      const { dispatch } = store
-      const originalRequest = error.config
-      if (error.response.status === 401 && originalRequest && !originalRequest._isRetry) {
-        originalRequest._isRetry = true;
-        try {
-          const response = await http.post('/refresh');
-
-          const { newAccessToken } = response.data;
-          dispatch(setToken(newAccessToken));
-          return await http.request(originalRequest);
-        } catch (error) {
-          console.log(error);
-        }
-        setCurrentUser(null);
-        // OR await signOut(); SO THEN cleancookie not necessary in backend
-      }
-    })
+  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('user')) || null);
 
   const signIn = async (inputs: { username: string, password: string }): Promise<void> => {
     const { username, password } = inputs

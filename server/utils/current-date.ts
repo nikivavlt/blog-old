@@ -5,7 +5,6 @@ const generateCurrentDate = (date) => (
       (`00${date.getHours()}`).slice(-2)}:${
       (`00${date.getMinutes()}`).slice(-2)}:${
       (`00${date.getSeconds()}`).slice(-2)}`
-  );
-  
+);
+
 export default generateCurrentDate;
-  

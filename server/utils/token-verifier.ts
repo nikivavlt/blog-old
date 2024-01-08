@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// verifyToken ...
 const isValidToken = (token: string, secret: string): boolean => {
   return jwt.verify(
     token,

@@ -3,22 +3,23 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 
-import database from './configurations/database.js';
+import corsOptions from './config/cors.js';
+import database from './config/database.js';
 import authRoutes from './routes/auth.js';
 import refreshRoute from './routes/refresh.js';
 import usersRoutes from './routes/users.js';
 import articlesRoutes from './routes/articles.js';
 import authMiddleware from './middlewares/authentication.js';
-import corsOptions from './configurations/cors.js';
+// import errorHandler from './middlewares/error.js';
 
 // absolute paths ? shortcut
 
 dotenv.config();
 
-const port = process.env.SERVER_PORT ?? 8800;
-
+const port = process.env.SERVER_PORT ?? 8080;
 const app = express();
 
+// custom middleware logger
 // app.use(logger);
 
 app.use(cors(corsOptions));
@@ -41,7 +42,6 @@ app.use(authMiddleware);
 app.use('/users', usersRoutes);
 app.use('/articles', articlesRoutes);
 
-// Обработка ошибок, последний Middleware
 // app.use(errorHandler);
 
 app.listen(port, () => {

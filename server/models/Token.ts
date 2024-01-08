@@ -1,4 +1,4 @@
-import database from '../configurations/database.js';
+import database from '../config/database.js';
 
 const getRefreshToken = (userId: string, callback): void => {
   const query = 'SELECT `refresh_token` from users WHERE id = ? ';

@@ -2,36 +2,47 @@
 // 401 if no cookie
 // 403 return if not exists
 
+import { deleteRefreshToken, getRefreshToken } from "../models/Token.js";
 import { generateAccessToken } from "../utils/token-generator.js";
 import jwt from "jsonwebtoken";
+import isValidToken from "../utils/token-verifier.js";
 
 const handleRefreshToken = (request, response) => {
   const authenticationHeader = request.headers.authorization || request.headers.Authorization;
   const refreshToken = request.cookies['refresh_token'];
-    
+
+  if (!refreshToken) return response.status(401).json('Unauthorized!'); // change text and 401 code 403
+
   // const accessToken = authenticationHeader.split(' ')[1];
+  const { id: userId, username, role } = jwt.decode(refreshToken); // use verify instead
 
-  const { username, role } = jwt.decode(refreshToken) // use verify instead
-  const newAccessToken = generateAccessToken(username, role)
+  getRefreshToken(userId, (error, databaseRefreshToken) => {
+    if (error !== null) console.log(error);
 
-  // try { // VERIFY REFRESH TOKEN AND CLEAR
-  //   jwt.verify(token, process.env.JWT_SECRET);
-  // } catch (error) {
-  //   return response.clearCookie('access_token', {
-  //     httpOnly: true,
-  //     sameSite: 'none',
-  //     secure: true
-  //   }).status(401).json('Access token expired.'); // sameSite 'none'
-  // }
-  // return response.status(200).json('Access token valid.');
+    const isTokensEqual = (refreshToken === databaseRefreshToken);
 
-  // and delete cookie inside database after verify
-//   return response.clearCookie('refresh_token', {
-//     // DELETE TOKEN IN DATABASE
-//     sameSite: 'none',
-//     secure: true
-//   }).status(403).json('Unknown or invalid refresh token.'); // sameSite 'none'
-  return response.status(200).json({ username, newAccessToken })
+    if (!isTokensEqual) return response.status(401).json('Invalid refresh token.'); // 401 instead 403
+
+    if (
+      !isValidToken(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+    ) {
+      deleteRefreshToken(userId, (error, data) => {
+        if (error !== null) console.log(error);
+        console.log(data);
+      });
+
+      return response.clearCookie('refresh_token', {
+        httpOnly: true,
+        sameSite: 'none', // strict instead
+        secure: true
+      }).status(401).json('Refresh token expired.'); // sameSite 'none' or 401 code instead 403
+    // }).status(403).json('Unknown or invalid refresh token.'); // sameSite 'none'
+    }
+
+    const newAccessToken = generateAccessToken(userId, username, role);
+
+    return response.status(200).json({ username, newAccessToken });
+  });
 };
 
-export default handleRefreshToken
+export default handleRefreshToken;

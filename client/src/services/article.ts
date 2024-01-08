@@ -1,10 +1,10 @@
-import http from 'utils/axios'
+import { axiosInstance } from 'utils/axios'
 import type IArticle from 'models/article'
 
 class ArticleService {
   async getArticles (category: string): Promise<IArticle[]> {
     try {
-      const response = await http.get(`articles${category}`)
+      const response = await axiosInstance.get(`articles${category}`)
 
       return response.data
     } catch (error) {
@@ -14,7 +14,7 @@ class ArticleService {
 
   async getArticle (url: string): Promise <IArticle | never> {
     try {
-      const response = await http.get(`/articles/${url}`)
+      const response = await axiosInstance.get(`/articles/${url}`)
       return response.data
     } catch (error) {
       console.log(error)
@@ -25,7 +25,7 @@ class ArticleService {
     const { title, description, image, categoryId, date } = data
 
     try {
-      const response = await http.post('/articles/', {
+      const response = await axiosInstance.post('/articles/', {
         title,
         description,
         image,
@@ -42,7 +42,7 @@ class ArticleService {
     const [title, description] = data
 
     try {
-      const response = await http.put(`/articles/${id}`, {
+      const response = await axiosInstance.put(`/articles/${id}`, {
         title,
         description
       })
@@ -54,7 +54,7 @@ class ArticleService {
 
   async deleteArticle (url: string): Promise<void> {
     try {
-      await http.delete(`/articles/${url}`)
+      await axiosInstance.delete(`/articles/${url}`)
     } catch (error) {
       console.log(error)
     }

@@ -1,4 +1,4 @@
-import { database } from '../configurations/database.js';
+import { database } from '../config/database.js';
 import bcrypt from 'bcryptjs';
 import type express from 'express';
 
@@ -16,14 +16,22 @@ const signUp = (request: express.Request, response: express.Response) => {
 
     if (data.length) return response.status(409).json('User already exists.');
 
+    const {
+      username,
+      password, 
+      email
+      // ....
+    } = request.body;
+
     // Hash the password and create user CREATE SERVICE
     const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(request.body.password, salt);
+    const hash = bcrypt.hashSync(request.body.password, salt); // change request.body to destructured object and name
+    // passwordHash
 
     // add refresh token inside database
     // add role
     // add is_admin boolean value or roles
-
+    // USE DATA FROM DESCTUCTURED OBJECT
     const query = 'INSERT INTO users(`username`, `email`, `password`) VALUES (?)';
     const values = [
       request.body.username,
@@ -46,7 +54,7 @@ const signOut = (request, response) => {
   // check if it has refresh token or not and send 204
   response.clearCookie('refresh_token', {
     // DELETE TOKEN IN DATABASE
-    sameSite: 'none',
+    sameSite: 'none', // strict
     secure: true
   }).status(200).json('User has been sign out'); // sameSite 'none'
   // 204 instead

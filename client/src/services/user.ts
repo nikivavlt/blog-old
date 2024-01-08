@@ -1,25 +1,25 @@
-import http from 'utils/axios'
+import { axiosInstance } from 'utils/axios'
 
 import type IUser from 'models/user'
 
 class UserService {
   async signIn (username: string, password: string): Promise<IUser> {
-    const response = await http.post('/auth/signin', { username, password })
+    const response = await axiosInstance.post('/auth/signin', { username, password })
 
     return response.data
   }
 
   async signOut (): Promise<void> {
-    await http.post('/auth/signout')
+    await axiosInstance.post('/auth/signout')
   }
 
   async signUp (username: string, email: string, password: string): Promise<void> {
-    await http.post('/auth/signup', { username, email, password })
+    await axiosInstance.post('/auth/signup', { username, email, password })
   }
 
   async verifyUser (): Promise<boolean> {
     try {
-      await http.post('/auth/verify')
+      await axiosInstance.post('/auth/verify')
     } catch (error) {
       if (error.response.status === 401) {
         return false
