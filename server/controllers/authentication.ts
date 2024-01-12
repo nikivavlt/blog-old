@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { generateAccessToken, generateRefreshToken } from '../utils/token-generator.js';
 import User from '../models/User.js';
+import { updateRefreshToken } from '../models/Token.js';
 
 const dayInMilliseconds = 24 * 60 * 60 * 1000;
 
@@ -19,20 +20,18 @@ const signIn = (request, response) => {
 
     // isPasswordsEqual
     if (!isPasswordCorrect) return response.status(403).json('Wrong password.'); // 401 instead Invalid password/ Wrong credentials.
-
-    const newObject = { ...data };
+    const { id: userId } = data;
 
     const refreshToken = generateRefreshToken(databaseUserId, databaseUsername, databaseRole);
 
-    newObject['refresh_token'] = refreshToken;
-
-    // move this to Token service - saveRefreshToken
-    new User(newObject).updateUser((error, data) => {
+    // OR saveRefreshToken
+    updateRefreshToken(userId, refreshToken, (error, data) => {
       if (error !== null) return response.json(error);
+      // console.log(data);
     });
 
-    // also add to service and function to verifyToken
     const accessToken = generateAccessToken(databaseUserId, databaseUsername, databaseRole);
+
     return response.cookie('refresh_token', refreshToken, {
       httpOnly: true,
       secure: true,

@@ -1,23 +1,18 @@
-// find user in db by refresh token
-// 401 if no cookie
-// 403 return if not exists
-
-import { deleteRefreshToken, getRefreshToken } from "../models/Token.js";
-import { generateAccessToken } from "../utils/token-generator.js";
-import jwt from "jsonwebtoken";
-import isValidToken from "../utils/token-verifier.js";
+import { deleteRefreshToken, getRefreshToken } from '../models/Token.js';
+import { generateAccessToken } from '../utils/token-generator.js';
+import jwt from 'jsonwebtoken';
+import isValidToken from '../utils/token-verifier.js';
 
 const handleRefreshToken = (request, response) => {
-  const authenticationHeader = request.headers.authorization || request.headers.Authorization;
+  // const authenticationHeader = request.headers.authorization || request.headers.Authorization;
   const refreshToken = request.cookies['refresh_token'];
-
-  if (!refreshToken) return response.status(401).json('Unauthorized!'); // change text and 401 code 403
+  if (!refreshToken) return response.status(401).json('Unauthorized!'); // change text and 401 code 403 message - no cookie
 
   // const accessToken = authenticationHeader.split(' ')[1];
   const { id: userId, username, role } = jwt.decode(refreshToken); // use verify instead
 
   getRefreshToken(userId, (error, databaseRefreshToken) => {
-    if (error !== null) console.log(error);
+    if (error !== null) console.log(error); // return 403 if not exists cookie
 
     const isTokensEqual = (refreshToken === databaseRefreshToken);
 
@@ -36,7 +31,7 @@ const handleRefreshToken = (request, response) => {
         sameSite: 'none', // strict instead
         secure: true
       }).status(401).json('Refresh token expired.'); // sameSite 'none' or 401 code instead 403
-    // }).status(403).json('Unknown or invalid refresh token.'); // sameSite 'none'
+    // }).status(403).json('Unknown or invalid refresh token.'); // sameSite 'none', add json 'User has been sign out'
     }
 
     const newAccessToken = generateAccessToken(userId, username, role);

@@ -23,7 +23,7 @@ const SingleArticle = (): JSX.Element => {
     const fetchArticle = async (): Promise<void> => {
       try {
         const articleData = await ArticleService.getArticle(articleUrl)
-        setArticle(articleData)
+        setArticle(articleData.article)
       } catch (error) {
         console.log(error)
 

@@ -5,11 +5,12 @@ import cookieParser from 'cookie-parser';
 
 import corsOptions from './config/cors.js';
 import database from './config/database.js';
-import authRoutes from './routes/auth.js';
-import refreshRoute from './routes/refresh.js';
+import authRoutes from './routes/authentication.js';
+import refreshRoute from './routes/refresh-token.js';
 import usersRoutes from './routes/users.js';
 import articlesRoutes from './routes/articles.js';
 import authMiddleware from './middlewares/authentication.js';
+import searchRoute from './routes/search.js';
 // import errorHandler from './middlewares/error.js';
 
 // absolute paths ? shortcut
@@ -39,6 +40,7 @@ app.use('/auth', authRoutes);
 app.use('/refresh', refreshRoute);
 
 app.use(authMiddleware);
+app.use('/search', searchRoute);
 app.use('/users', usersRoutes);
 app.use('/articles', articlesRoutes);
 

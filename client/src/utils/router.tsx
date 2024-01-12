@@ -10,6 +10,7 @@ import NotFound from 'pages/NotFound'
 import Primary from 'pages/Primary/Primary'
 import SignIn from 'pages/SignIn/SignIn'
 import SignUp from 'pages/SignUp/SignUp'
+import Search from 'pages/Search/Search'
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: `${routes.Articles}/:url`,
         element: <SingleArticle />
+      },
+      {
+        path: `${routes.Search}`,
+        element: <Search />
       },
       {
         path: routes.Editor,

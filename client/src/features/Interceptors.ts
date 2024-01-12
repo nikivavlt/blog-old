@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 
 import { AuthContext } from 'context/AuthContext';
 import { axiosInstance, axiosInstanceTwo } from 'utils/axios';
@@ -8,7 +8,7 @@ import store from 'store/store';
 const Interceptors = ({ children }) => {
   const { setCurrentUser } = useContext(AuthContext);
 
-  useEffect(() => { // or useMemo
+  useMemo(() => { // useMemo???
     axiosInstance.interceptors.request.use((config) => {
       const accessToken = store.getState().token;
 
@@ -22,19 +22,20 @@ const Interceptors = ({ children }) => {
       async (error) => {
         const previousRequest = error?.config;
         if (error.response.status === 401 && !previousRequest.retry) {
-        //   previousRequest.retry = true;
+        //   previousRequest.retry = true; DELETE THIS?
           const { dispatch } = store;
 
           try {
             const response = await axiosInstanceTwo.get('/refresh');
 
-            const { newAccessToken } = response.data;
+            const { username, newAccessToken } = response.data;
             dispatch(setToken(newAccessToken));
+            setCurrentUser({ username }); // fix this bug (below setter too)
             return await axiosInstance.request(previousRequest);
           } catch (error) {
             console.log(error);
           }
-          setCurrentUser(null);
+          setCurrentUser(null); // !!! ???
           // OR await signOut(); SO THEN cleancookie not necessary in backend
         }
         throw error;

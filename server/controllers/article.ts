@@ -40,7 +40,6 @@ export const getArticles = (request, response) => {
 }
 
 export const getArticle = (request, response) => {
-  console.log(request.headers)
   const query = 'SELECT `username` as author, u.id as author_id, `title`, `description`, `url`, a.id, a.image, u.image AS authorImage, c.name AS category, `created_at` FROM users u JOIN articles a ON u.id=a.author_id JOIN categories c ON a.category_id=c.id WHERE a.url = ?'
   // check if article id required - send 400
   // if (!req?.body?.id) return res.status(400).json({ 'message': 'Employee ID required.' });
@@ -51,13 +50,18 @@ export const getArticle = (request, response) => {
   //   if (!employee) {
   //     return res.status(204).json({ "message": `No employee matches ID ${req.body.id}.` });
   // }
-    if (data.length === 0) return response.status(404).json('Article not found!')
+  if (data.length === 0) return response.status(404).json('Article not found!')
+    // implement different service and model
+    const query = 'SELECT c.description, c.user_id, c.created_at, c.updated_at, u.username FROM comments c JOIN users u ON c.user_id=u.id WHERE c.article_id = ?';
 
-    // update field "views" increment it
+    database.query(query, data[0].id, (error, commentsData) => {
+      if (error) return response.status(500).send(error);
+      // update field "views" increment it
 
-    return response.status(200).json(data[0])
-  })
-}
+      return response.status(200).json({ article: data[0], comments: commentsData })
+    });
+  });
+};
 
 // createArticle
 export const addArticle = (request, response) => {

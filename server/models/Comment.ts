@@ -1,5 +1,5 @@
 // description
-// author
+// author_id
 
 // How to connect comments to article? > 
 // 1 ) articles has arr of comments ids > map them > find each comment and create array return it (this one is better for count comments arr.length)

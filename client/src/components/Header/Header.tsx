@@ -5,6 +5,7 @@ import Logotype from 'assets/images/logotype.svg'
 
 import './styles.scss'
 import { setToken } from 'store/actions/token'
+import SearchBar from 'components/SearchBar'
 
 const Header = (): JSX.Element => {
   const { currentUser, signOut } = useContext(AuthContext)
@@ -15,10 +16,7 @@ const Header = (): JSX.Element => {
           <img src={Logotype} alt="Creation Agency logotype" />
         </Link>
         <div>
-          <div className='search-bar'>
-            <input type="text" placeholder="Search.." />
-            <button type="submit"><i className="fa fa-search"></i></button>
-          </div>
+          <SearchBar></SearchBar>
           <div className='links'>
             <span>
               <span>

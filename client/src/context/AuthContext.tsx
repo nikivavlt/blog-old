@@ -3,6 +3,7 @@ import React, { type ReactNode, createContext, useEffect, useState } from 'react
 import UserService from 'services/user'
 import { setToken } from 'store/actions/token'
 import store from 'store/store'
+import type IUser from 'models/user'
 
 export const AuthContext = createContext<any>({})
 
@@ -13,7 +14,11 @@ interface Props {
 export const AuthContextProvider = ({ children }: Props): JSX.Element => {
   const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('user')) || null);
 
-  const signIn = async (inputs: { username: string, password: string }): Promise<void> => {
+  useEffect(() => {
+    localStorage.setItem('user', JSON.stringify(currentUser))
+  }, [currentUser])
+
+  const signIn = async (inputs: { username: string, password: string }): Promise<IUser> => {
     const { username, password } = inputs
 
     const responseData = await UserService.signIn(username, password);
@@ -33,10 +38,6 @@ export const AuthContextProvider = ({ children }: Props): JSX.Element => {
 
     setCurrentUser(null)
   }
-
-  useEffect(() => {
-    localStorage.setItem('user', JSON.stringify(currentUser))
-  }, [currentUser])// Change this instead!!!
 
   return (
     <AuthContext.Provider value={{ currentUser, signIn, signOut, setCurrentUser }}>

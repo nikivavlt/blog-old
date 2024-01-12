@@ -19,18 +19,18 @@ class User {
     this.refresh_token = user.refresh_token;
   }
 
-  updateUser = (callback) => {
-    const query = 'UPDATE users SET `id` = ?, `username` = ?, `email` = ?, `password` = ?, `role` = ?, `image` = ?, `refresh_token` = ? WHERE username = ?';
-    const { updateUser, ...data } = this;
+  // updateUser = (callback) => {
+  //   const query = 'UPDATE users SET `id` = ?, `username` = ?, `email` = ?, `password` = ?, `role` = ?, `image` = ?, `refresh_token` = ? WHERE username = ?';
+  //   const { updateUser, ...data } = this;
 
-    // for (let v in this) {
-    //     console.log(typeof this[v] === 'function')
-    // }
-    database.query(query, [...Object.values(data), this.username], (error, data) => {
-      if (error !== null) callback(error, null);
-      callback(null, data);
-    });
-  };
+  //   // for (let v in this) {
+  //   //     console.log(typeof this[v] === 'function')
+  //   // }
+  //   database.query(query, [...Object.values(data), this.username], (error, data) => {
+  //     if (error !== null) callback(error, null);
+  //     callback(null, data);
+  //   });
+  // };
 
   // REMOVE * FROM QUERY!!!
   static getUserByName = (username, callback) => {

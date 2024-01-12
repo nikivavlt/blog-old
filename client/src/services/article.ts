@@ -4,7 +4,7 @@ import type IArticle from 'models/article'
 class ArticleService {
   async getArticles (category: string): Promise<IArticle[]> {
     try {
-      const response = await axiosInstance.get(`articles${category}`)
+      const response = await axiosInstance.get(`/articles${category}`)
 
       return response.data
     } catch (error) {
@@ -60,10 +60,18 @@ class ArticleService {
     }
   }
 
-  findArticlesBy() {
-    // ... by title, id and etc..
+  async getArticlesByString(queryString: string) {
+    // const queryValue = encodeURIComponent(searchString);
+
+    try {
+      const response = await axiosInstance.get(`/search${queryString}`); // query string
+      console.log(response)
+      return response;
+    } catch {
+      console.log(error)
+    }
   }
 }
 
-export default new ArticleService()
+export default new ArticleService();
 // Connect service to the project

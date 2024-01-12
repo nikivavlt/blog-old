@@ -9,6 +9,7 @@ const isValidToken = (token: string, secret: string): boolean => {
     token,
     secret,
     (error, decoded) => {
+      // if (err || foundUser.username !== decoded.username) return res.sendStatus(403);
       if (error) return false;
       return true;
     }
