@@ -40,7 +40,6 @@ const Editor = (): JSX.Element => {
     try {
       const categoryId = Category[category]
       const date = dateToString(new Date())
-
       state !== null
         ? await ArticleService.updateArticle(state.id, [title, value])
         : await ArticleService.createArticle({ title, value, image, categoryId, date })

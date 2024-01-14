@@ -1,7 +1,7 @@
 import { database } from '../config/database.js'
 import jwt from 'jsonwebtoken'
 
-
+// Comments for TO DO - Good practice
 // SINGLE TASK FOR FUNCTION
 // In JavaScript && operator returns the first value if it's falsy or the second one if not.
 export const getArticles = (request, response) => {
@@ -152,7 +152,7 @@ export const updateArticle = (request, response) => {
   jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (error, userData) => {
     if (error) return response.status(403).json('Token is not valid!')
 
-    const postId = request.params.id
+    const postId = request.params.url
     // if didn't find send 204 not found `No employee matches ID ${req.body.id}.`
 
     const query = 'UPDATE articles SET `title`=?, `description`=? WHERE `id` = ? AND `author_id` = ?'
@@ -165,6 +165,7 @@ export const updateArticle = (request, response) => {
 
     database.query(query, [...values, postId, userData.id], (error, data) => {
       if (error) return response.status(500).json(error)
+      console.log(data)
       return response.json('Post has been updated.')
     })
   })

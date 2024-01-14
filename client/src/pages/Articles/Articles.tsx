@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import cleanHTML from 'utils/helpers/clean-html';
+
 import { Link, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getArticles } from 'store/actions/article';
@@ -18,6 +20,7 @@ interface IDispatchProps {
 }
 
 interface IProps extends IStateProps, IDispatchProps {}
+
 
 const Articles = ({ articles, getArticles }: IProps): JSX.Element => {
   const [currentArticles, setCurrentArticles] = useState<IArticle[]>([]);
@@ -47,9 +50,9 @@ const Articles = ({ articles, getArticles }: IProps): JSX.Element => {
                   Title: {article.title}
                 </h2>
               </Link>
-              <p>
-                Description: {article.description}
-              </p>
+              <div>
+                Description: <p dangerouslySetInnerHTML={{ __html: cleanHTML(article.description) }}></p>
+              </div>
               <Link to={`/articles/${article.url}`}>
                 <button>
                   <p>

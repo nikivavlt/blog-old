@@ -13,3 +13,4 @@ Features:
 - JSON Web Token.
 - Authentication.
 - Authorization.
+- Search engine functionality.

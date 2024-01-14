@@ -16,7 +16,7 @@ const Search = () => {
     };
 
     fetchArticle();
-  }, []);
+  }, [location.search]);
 
   return (
     <div>Search</div>

@@ -1,3 +1,4 @@
+// Comments for regex expressions - Good practice
 const generateUrlSlug = (title: string): string => {
   return title
     .toLowerCase()

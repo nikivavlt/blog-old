@@ -1,3 +1,4 @@
+
 const optionButtons = document.querySelectorAll('.option-button')
 const advancedOptionButton = document.querySelectorAll('.adv-option-button')
 const fontName = document.getElementById('fontName')

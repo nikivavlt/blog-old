@@ -8,6 +8,7 @@ import ArticleService from 'services/article'
 import './styles.scss'
 import dateFromNow from 'utils/helpers/date-from-now.helper'
 import type IArticle from 'models/article'
+import cleanHTML from 'utils/helpers/clean-html'
 // import { Edit } from '../../assets/images/edit.png' - this case
 
 const SingleArticle = (): JSX.Element => {
@@ -72,9 +73,10 @@ const SingleArticle = (): JSX.Element => {
         </p>
         comments for all with opportunity to reply, date and user role (Comment form - Photo)
 
-        <p>
-          {article.description}
-        </p>
+        <div>
+          Description:
+          <p dangerouslySetInnerHTML={{ __html: cleanHTML(article.description) }}></p>
+        </div>
       </div>
       <div className='menu'>
         <Menu category={article.category}></Menu>
