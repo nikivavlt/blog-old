@@ -1,6 +1,6 @@
 import React, { type ReactNode, createContext, useEffect, useState } from 'react'
 
-import UserService from 'services/user'
+import UserService from 'services/users'
 import { setToken } from 'store/actions/token'
 import store from 'store/store'
 import type IUser from 'models/user'

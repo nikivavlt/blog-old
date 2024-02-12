@@ -1,16 +1,17 @@
-import React from 'react'
-import { createBrowserRouter } from 'react-router-dom'
+import React from 'react';
+import { createBrowserRouter } from 'react-router-dom';
 
-import { routes } from 'utils/constants/routes'
-import Layout from 'components/Layout'
-import Articles from 'pages/Articles/Articles'
-import SingleArticle from 'pages/SingleArticle/SingleArticle'
-import Editor from 'pages/Editor/Editor'
-import NotFound from 'pages/NotFound'
-import Primary from 'pages/Primary/Primary'
-import SignIn from 'pages/SignIn/SignIn'
-import SignUp from 'pages/SignUp/SignUp'
-import Search from 'pages/Search/Search'
+import { routes } from 'utils/constants/routes';
+import Layout from 'components/Layout';
+import Articles from 'pages/Articles/Articles';
+import SingleArticle from 'pages/SingleArticle/SingleArticle';
+import Editor from 'pages/Editor/Editor';
+import NotFound from 'pages/NotFound';
+import Primary from 'pages/Primary/Primary';
+import SignIn from 'pages/SignIn/SignIn';
+import SignUp from 'pages/SignUp/SignUp';
+import Search from 'pages/Search/Search';
+import User from 'pages/User';
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
       {
         path: `${routes.Articles}/:url`,
         element: <SingleArticle />
+      },
+      {
+        path: `${routes.Users}/:username`,
+        element: <User />
       },
       {
         path: `${routes.Search}`,
@@ -53,4 +58,4 @@ export const router = createBrowserRouter([
     path: routes.NotFound,
     element: <NotFound />
   }
-], { basename: '/blog' })
+], { basename: '/blog' });

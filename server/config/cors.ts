@@ -7,6 +7,9 @@ const corsOptions = {
     'Authorization',
     'Access-Control-Allow-Credentials',
     'Access-Control-Allow-Origin'
+  ],
+  exposedHeaders: [
+    'Auth-Middleware'
   ]
 };
 

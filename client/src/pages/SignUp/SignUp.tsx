@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import './SignUp.scss'
-import UserService from 'services/user'
+import UserService from 'services/users'
 import FormInput from 'components/FormInput/FormInput'
 
 const SignUp = (): JSX.Element => {

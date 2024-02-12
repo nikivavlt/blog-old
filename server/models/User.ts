@@ -24,7 +24,8 @@ class User {
   //   const { updateUser, ...data } = this;
 
   //   // for (let v in this) {
-  //   //     console.log(typeof this[v] === 'function')
+  //   //     
+  // (typeof this[v] === 'function')
   //   // }
   //   database.query(query, [...Object.values(data), this.username], (error, data) => {
   //     if (error !== null) callback(error, null);

@@ -1,14 +1,13 @@
-import React, { useContext, useEffect } from 'react'
-import { AuthContext } from 'context/AuthContext'
-import { Link } from 'react-router-dom'
-import Logotype from 'assets/images/logotype.svg'
+import React, { useContext, useEffect } from 'react';
+import { AuthContext } from 'context/AuthContext';
+import { Link } from 'react-router-dom';
+import Logotype from 'assets/images/logotype.svg';
 
-import './styles.scss'
-import { setToken } from 'store/actions/token'
-import SearchBar from 'components/SearchBar'
+import './styles.scss';
+import SearchBar from 'components/SearchBar';
 
 const Header = (): JSX.Element => {
-  const { currentUser, signOut } = useContext(AuthContext)
+  const { currentUser, signOut } = useContext(AuthContext);
   return (
     <header>
       <div>
@@ -20,7 +19,11 @@ const Header = (): JSX.Element => {
           <div className='links'>
             <span>
               <span>
-                { currentUser?.username }
+                { currentUser &&
+                <Link to={`/users/${(currentUser?.username).toLowerCase()}`}>
+                  { currentUser?.username }
+                </Link>
+                }
               </span>
                 <span>
                   { currentUser?.username
@@ -38,8 +41,8 @@ const Header = (): JSX.Element => {
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
 // const Header = (): JSX.Element => {
 //   const { currentUser, signOut } = useContext(AuthContext)
@@ -75,4 +78,4 @@ const Header = (): JSX.Element => {
 //   )
 // }
 
-export default Header
+export default Header;

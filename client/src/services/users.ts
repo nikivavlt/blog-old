@@ -27,6 +27,16 @@ class UserService {
     }
     return true
   }
+
+  async getUser (username: string): Promise<void> {
+    try {
+      const response = await axiosInstance.get(`/users/${username}`);
+
+      return response.data
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
 
 export default new UserService()

@@ -65,7 +65,6 @@ class ArticleService {
 
     try {
       const response = await axiosInstance.get(`/search${queryString}`); // query string
-      console.log(response)
       return response;
     } catch {
       console.log(error)

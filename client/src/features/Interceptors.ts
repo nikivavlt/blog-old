@@ -21,8 +21,7 @@ const Interceptors = ({ children }) => {
     axiosInstance.interceptors.response.use((response) => response,
       async (error) => {
         const previousRequest = error?.config;
-        if (error.response.status === 401 && !previousRequest.retry) {
-        //   previousRequest.retry = true; DELETE THIS?
+        if (error.response.status === 401 && error.response.headers['auth-middleware']) { // don't HARDCODE destructure instead
           const { dispatch } = store;
 
           try {

@@ -44,7 +44,7 @@ export const getArticle = (request, response) => {
   // check if article id required - send 400
   // if (!req?.body?.id) return res.status(400).json({ 'message': 'Employee ID required.' });
 
-  database.query(query, [request.params.url], (error, data) => {
+  database.query(query, [request.params.url], (error, data) => { // HARDCODED request.params.url!!!
     if (error) return response.status(500).send(error);
     // 204 instead
   //   if (!employee) {
@@ -121,10 +121,10 @@ export const addArticle = (request, response) => {
 export const deleteArticle = (request, response) => {
   const token = request.cookies.refresh_token
 
-  if (!token) return response.status(401).json('Not authenticated!') // CHANGE STATUS CODE
+  if (!token) return response.status(401).json('Not authenticated!')
 
   jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (error, userData) => {
-    if (error) return response.status(403).json('Token is not valid!')
+    if (error) return response.status(401).json('Token is not valid!'); 
 
     const url = request.params.url;
 
@@ -150,7 +150,7 @@ export const updateArticle = (request, response) => {
 
   // add service here or middleware instead
   jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (error, userData) => {
-    if (error) return response.status(403).json('Token is not valid!')
+    if (error) return response.status(401).json('Token is not valid!')
 
     const postId = request.params.url
     // if didn't find send 204 not found `No employee matches ID ${req.body.id}.`
@@ -165,7 +165,6 @@ export const updateArticle = (request, response) => {
 
     database.query(query, [...values, postId, userData.id], (error, data) => {
       if (error) return response.status(500).json(error)
-      console.log(data)
       return response.json('Post has been updated.')
     })
   })

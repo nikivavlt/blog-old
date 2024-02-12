@@ -11,9 +11,11 @@ const authMiddleware = (request, response, next) => {
 
   if (!refreshToken) return next();
 
-  if (!authenticationHeader) return response.sendStatus(401);
+  response.set({ 'Auth-Middleware': true });
 
-  if (!authenticationHeader?.startsWith('Bearer ')) return response.sendStatus(401);
+  if (!authenticationHeader) return response.sendStatus(401); // add comments json
+
+  if (!authenticationHeader?.startsWith('Bearer ')) return response.sendStatus(401); // add comments json
 
   const accessToken = authenticationHeader.split(' ')[1];
 

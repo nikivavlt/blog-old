@@ -11,8 +11,6 @@ const Search = () => {
 
     const fetchArticle = async (): Promise<void> => {
       const response = ArticleService.getArticlesByString(queryString);
-
-      console.log(response)
     };
 
     fetchArticle();

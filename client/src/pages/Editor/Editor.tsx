@@ -1,59 +1,71 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { Category } from 'models/category'
-import dateToString from 'utils/helpers/date-to-string.helper'
-import './Editor.styles.scss'
-import ArticleService from 'services/article'
+import { Category } from 'models/category';
+import dateToString from 'utils/helpers/date-to-string.helper';
+import './Editor.styles.scss';
+import ArticleService from 'services/article';
+import { axiosInstance } from 'utils/axios';
 
 const Editor = (): JSX.Element => {
-  const state = useLocation().state
-  const [value, setValue] = useState(state?.description || '')
-  const [title, setTitle] = useState(state?.title || '')
-  const [image, setImage] = useState(null)
-  const [category, setCategory] = useState(state?.category || '')
+  const state = useLocation().state;
+  const [value, setValue] = useState(state.description ?? '');
+  const [title, setTitle] = useState(state.title ?? '');
+  const [image, setImage] = useState();
+  const [category, setCategory] = useState(state.category ?? '');
 
-  const descriptionDiv = useRef(null)
+  const upload = async (): Promise<void> => {
+    try {
+      const formData = new FormData();
+      formData.append('image', image);
+      await axiosInstance.post('/upload', formData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const descriptionDiv = useRef(null);
 
   useEffect(() => {
-    descriptionDiv.current.innerHTML = value
-  }, [])
+    descriptionDiv.current.innerHTML = value;
+  }, []);
 
   useEffect(() => {
-    const script = document.createElement('script')
+    const script = document.createElement('script');
 
-    script.src = './editor.js'
-    script.async = true
+    script.src = './editor.js';
+    script.async = true;
 
-    document.body.appendChild(script)
+    document.body.appendChild(script);
 
     return () => {
-      document.body.removeChild(script)
-    }
-  }, [])
+      document.body.removeChild(script);
+    };
+  }, []);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleClick = async (event: React.MouseEvent): Promise<void> => {
-    event.preventDefault()
+    event.preventDefault();
+    await upload();
 
     try {
-      const categoryId = Category[category]
-      const date = dateToString(new Date())
+      const categoryId = Category[category];
+      const date = dateToString(new Date());
       state !== null
         ? await ArticleService.updateArticle(state.id, [title, value])
-        : await ArticleService.createArticle({ title, value, image, categoryId, date })
+        : await ArticleService.createArticle({ title, value, image, categoryId, date });
 
-      navigate('/')
+      navigate('/');
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div className='editor'>
       <div className="content">
-        <input type="text" value={title} placeholder='Title' onChange={(event) => { setTitle(event.target.value) }} />
+        <input type="text" value={title} placeholder='Title' onChange={(event) => { setTitle(event.target.value); }} />
 
         <div className="editor-container">
           <div className="editor">
@@ -132,7 +144,7 @@ const Editor = (): JSX.Element => {
                   <label htmlFor="backColor">Highlight Color</label>
                 </div>
               </div>
-              <div id="text-input" ref={descriptionDiv} contentEditable="true" onInput={(event) => { setValue(event.currentTarget.innerHTML) }}></div>
+              <div id="text-input" ref={descriptionDiv} contentEditable="true" onInput={(event) => { setValue(event.currentTarget.innerHTML); }}></div>
             </div>
           </div>
         </div>
@@ -149,7 +161,7 @@ const Editor = (): JSX.Element => {
           <span>
             <b>Visibility: </b> Public
           </span>
-          <input style={{ display: 'none' }} type="file" id="file" onChange={(event) => { setImage(event.target.files[0])} } />
+          <input style={{ display: 'none' }} type="file" id="file" onChange={(event) => { setImage(event.target.files[0]); } } />
           <label className='file' htmlFor="file">Upload image</label>
 
           <div className="buttons">
@@ -166,7 +178,7 @@ const Editor = (): JSX.Element => {
             Category
           </h1>
           <div className="category">
-            <input type="radio" checked={category === 'Art'} name="category" value="Art" id="Art" onChange={(event) => { setCategory(event.target.value) }} />
+            <input type="radio" checked={category === 'Art'} name="category" value="Art" id="Art" onChange={(event) => { setCategory(event.target.value); }} />
             <label htmlFor="Art">Art</label>
             {/* Make for all the same tags */}
           </div>
@@ -193,7 +205,7 @@ const Editor = (): JSX.Element => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Editor
+export default Editor;

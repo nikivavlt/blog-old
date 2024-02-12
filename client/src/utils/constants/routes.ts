@@ -1,6 +1,7 @@
 export const routes = {
   Primary: '/',
   Articles: '/articles',
+  Users: '/users',
   Search: '/search',
   Editor: '/editor',
   SignIn: '/signin',

@@ -6,7 +6,7 @@ import isValidToken from '../utils/token-verifier.js';
 const handleRefreshToken = (request, response) => {
   // const authenticationHeader = request.headers.authorization || request.headers.Authorization;
   const refreshToken = request.cookies['refresh_token'];
-  if (!refreshToken) return response.status(401).json('Unauthorized!'); // change text and 401 code 403 message - no cookie
+  if (!refreshToken) return response.status(401).json('Unauthorized!');
 
   // const accessToken = authenticationHeader.split(' ')[1];
   const { id: userId, username, role } = jwt.decode(refreshToken); // use verify instead
@@ -16,22 +16,20 @@ const handleRefreshToken = (request, response) => {
 
     const isTokensEqual = (refreshToken === databaseRefreshToken);
 
-    if (!isTokensEqual) return response.status(401).json('Invalid refresh token.'); // 401 instead 403
+    if (!isTokensEqual) return response.status(401).json('Invalid refresh token.');
 
     if (
       !isValidToken(refreshToken, process.env.REFRESH_TOKEN_SECRET)
     ) {
       deleteRefreshToken(userId, (error, data) => {
         if (error !== null) console.log(error);
-        console.log(data);
       });
 
       return response.clearCookie('refresh_token', {
         httpOnly: true,
         sameSite: 'none', // strict instead
         secure: true
-      }).status(401).json('Refresh token expired.'); // sameSite 'none' or 401 code instead 403
-    // }).status(403).json('Unknown or invalid refresh token.'); // sameSite 'none', add json 'User has been sign out'
+      }).status(401).json('Refresh token expired.');
     }
 
     const newAccessToken = generateAccessToken(userId, username, role);

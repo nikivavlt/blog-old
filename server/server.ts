@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import fileUpload from 'express-fileupload';
 import cookieParser from 'cookie-parser';
 
 import corsOptions from './config/cors.js';
@@ -10,6 +11,7 @@ import refreshRoute from './routes/refresh-token.js';
 import usersRoutes from './routes/users.js';
 import articlesRoutes from './routes/articles.js';
 import authMiddleware from './middlewares/authentication.js';
+import uploadRoute from './routes/upload.js';
 import searchRoute from './routes/search.js';
 // import errorHandler from './middlewares/error.js';
 
@@ -25,15 +27,15 @@ const app = express();
 
 app.use(cors(corsOptions));
 
-// app.use(express.static('uploads'))
-// app.use(express.static(path.resolve(__dirname, 'static')))
-// app.use(fileUpload())
-// express-fileupload
+app.use(fileUpload());
+app.use(express.static('uploads'))
+// app.use(express.static(path.resolve(__dirname, 'static')));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
+
 
 // Routes
 app.use('/auth', authRoutes);
@@ -43,6 +45,9 @@ app.use(authMiddleware);
 app.use('/search', searchRoute);
 app.use('/users', usersRoutes);
 app.use('/articles', articlesRoutes);
+
+//
+app.use('/upload', uploadRoute);
 
 // app.use(errorHandler);
 
