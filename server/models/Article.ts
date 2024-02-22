@@ -35,7 +35,7 @@ class Article {
     const defaultQuery = 'SELECT a.*, c.name as category FROM articles a JOIN categories c ON a.category_id = c.id';
     const categoryQuery = 'SELECT a.*, c.name as category FROM articles a JOIN categories c ON a.category_id = c.id WHERE c.name = ?';
 
-    const query = categoryName === ''
+    const query = (categoryName === '')
       ? defaultQuery
       : categoryQuery;
 
