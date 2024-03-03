@@ -1,12 +1,12 @@
 import express from 'express'
 
-import { addArticle, deleteArticle, getArticles, getArticle, updateArticle } from '../controllers/article.js'
+import { createArticle, deleteArticle, getArticles, getArticle, updateArticle } from '../controllers/article.js'
 
 const router = express.Router()
 
 router.route('/')
   .get(getArticles)
-  .post(addArticle) // createArticle
+  .post(createArticle)
 
 router.route('/:url')
   .get(getArticle)
