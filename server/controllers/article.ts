@@ -64,7 +64,7 @@ export const getArticle = (request, response) => {
 };
 
 // createArticle
-export const addArticle = (request, response) => {
+export const createArticle = (request, response) => {
   // const currentDate = generateCurrentDate(new Date());
   // const articleUrl = generateArticleUrl(request.body.title);
   const token = request.cookies.access_token
