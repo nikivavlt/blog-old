@@ -39,6 +39,7 @@ class User {
 
     database.query(query, [username], (error, data) => {
       if (error !== null) callback(error, null);
+      console.log(`HEY!` + data);
       callback(null, data[0]);
     });
   };
