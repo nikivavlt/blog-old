@@ -34,7 +34,7 @@ const handleRefreshToken = (request, response) => {
 
     const newAccessToken = generateAccessToken(userId, username, role);
 
-    return response.status(200).json({ username, newAccessToken });
+    return response.status(200).json({ id: userId, username, newAccessToken });
   });
 };
 

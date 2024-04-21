@@ -10,9 +10,11 @@ import authRoutes from './routes/authentication.js';
 import refreshRoute from './routes/refresh-token.js';
 import usersRoutes from './routes/users.js';
 import articlesRoutes from './routes/articles.js';
+import categoriesRoute from './routes/categories.js'
 import authMiddleware from './middlewares/authentication.js';
 import uploadRoute from './routes/upload.js';
 import searchRoute from './routes/search.js';
+import likesRoute from './routes/likes.js';
 // import errorHandler from './middlewares/error.js';
 
 // absolute paths ? shortcut
@@ -28,8 +30,8 @@ const app = express();
 app.use(cors(corsOptions));
 
 app.use(fileUpload());
-app.use(express.static('uploads'))
-// app.use(express.static(path.resolve(__dirname, 'static')));
+app.use(express.static('uploads'));
+// app.use(express.static(path.resolve('uploads')));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -45,6 +47,8 @@ app.use(authMiddleware);
 app.use('/search', searchRoute);
 app.use('/users', usersRoutes);
 app.use('/articles', articlesRoutes);
+app.use('/categories', categoriesRoute);
+app.use('/likes', likesRoute);
 
 //
 app.use('/upload', uploadRoute);

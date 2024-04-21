@@ -30,7 +30,7 @@ export const getArticles = (request, response) => {
     ? 'SELECT * FROM articles WHERE category=?'
     : 'SELECT * FROM articles'
 
-    // check if it exists and return 204 `No employee matches ID ${req.body.id}.`
+  // check if it exists and return 204 `No employee matches ID ${req.body.id}.`
 
   database.query(testQuery, [request.query.category], (error, data) => {
     if (error) return response.status(500).send(error)
@@ -40,17 +40,17 @@ export const getArticles = (request, response) => {
 }
 
 export const getArticle = (request, response) => {
-  const query = 'SELECT `username` as author, u.id as author_id, `title`, `description`, `url`, a.id, a.image, u.image AS authorImage, c.name AS category, `created_at` FROM users u JOIN articles a ON u.id=a.author_id JOIN categories c ON a.category_id=c.id WHERE a.url = ?'
+  const query = 'SELECT `username` as author, a.id as article_id, u.id as author_id, `title`, `description`, `url`, a.id, a.image, u.image AS authorImage, c.name AS category, `created_at` FROM users u JOIN articles a ON u.id=a.author_id JOIN categories c ON a.category_id=c.id WHERE a.url = ?'
   // check if article id required - send 400
   // if (!req?.body?.id) return res.status(400).json({ 'message': 'Employee ID required.' });
 
   database.query(query, [request.params.url], (error, data) => { // HARDCODED request.params.url!!!
     if (error) return response.status(500).send(error);
     // 204 instead
-  //   if (!employee) {
-  //     return res.status(204).json({ "message": `No employee matches ID ${req.body.id}.` });
-  // }
-  if (data.length === 0) return response.status(404).json('Article not found!')
+    //   if (!employee) {
+    //     return res.status(204).json({ "message": `No employee matches ID ${req.body.id}.` });
+    // }
+    if (data.length === 0) return response.status(404).json('Article not found!')
     // implement different service and model
     const query = 'SELECT c.description, c.user_id, c.created_at, c.updated_at, u.username FROM comments c JOIN users u ON c.user_id=u.id WHERE c.article_id = ?';
 
@@ -155,13 +155,21 @@ export const updateArticle = (request, response) => {
     const postId = request.params.url
     // if didn't find send 204 not found `No employee matches ID ${req.body.id}.`
 
-    const query = 'UPDATE articles SET `title`=?, `description`=? WHERE `id` = ? AND `author_id` = ?'
-    // also update image_url if upload photo
+    const query = request.body.image === undefined
+      ? 'UPDATE articles SET `title`=?, `description`=? WHERE `id` = ? AND `author_id` = ?'
+      : 'UPDATE articles SET `title`=?, `description`=?, `image`=? WHERE `id` = ? AND `author_id` = ?';
 
-    const values = [
-      request.body.title,
-      request.body.description
-    ]
+    // also update image_url if upload photo
+    const values = request.body.image === undefined
+      ? [
+          request.body.title,
+          request.body.description
+        ]
+      : [
+          request.body.title,
+          request.body.description,
+          request.body.image
+        ]
 
     database.query(query, [...values, postId, userData.id], (error, data) => {
       if (error) return response.status(500).json(error)

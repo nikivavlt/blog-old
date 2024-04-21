@@ -39,7 +39,7 @@ const signIn = (request, response) => {
       maxAge: dayInMilliseconds
     })
       .status(200)
-      .json({ username: databaseUsername, token: accessToken });
+      .json({ id: userId, username: databaseUsername, token: accessToken });
   });
 };
 
