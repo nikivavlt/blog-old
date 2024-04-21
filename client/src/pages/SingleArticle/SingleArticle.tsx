@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import Menu from 'components/Menu'
-import { Category } from 'models/category'
 import { AuthContext } from 'context/AuthContext'
 import ArticleService from 'services/article'
 import './styles.scss'
 import dateFromNow from 'utils/helpers/date-from-now.helper'
 import type IArticle from 'models/article'
 import cleanHTML from 'utils/helpers/clean-html'
+import { getLikes, addLike } from 'services/likes'
 // import { Edit } from '../../assets/images/edit.png' - this case
 
 const SingleArticle = (): JSX.Element => {
@@ -23,8 +23,14 @@ const SingleArticle = (): JSX.Element => {
   useEffect(() => {
     const fetchArticle = async (): Promise<void> => {
       try {
-        const articleData = await ArticleService.getArticle(articleUrl)
-        setArticle(articleData.article)
+        const data = await ArticleService.getArticle(articleUrl)
+        const articleData = data.article;
+
+        const articleId = articleData.article_id;
+        const likes = await fetchLikes(articleId);
+        articleData.likes = likes.count;
+
+        setArticle(articleData);
       } catch (error) {
         console.log(error)
 
@@ -32,8 +38,19 @@ const SingleArticle = (): JSX.Element => {
       }
     }
 
+    const fetchLikes = async(id) => {
+      const likes = await getLikes(id);
+      return likes;
+    }
+
     fetchArticle()
+    // wrong implementation 2 async one after one
   }, [articleUrl])
+
+  const handleClick = async () => {
+    const likeResponse = await addLike(article.article_id, currentUser.id);
+    console.log(likeResponse);
+  };
 
   const handleDelete = async (): Promise<void> => {
     try {
@@ -50,12 +67,12 @@ const SingleArticle = (): JSX.Element => {
     <div className='single-article'>
       <div className='content'>
         <h1>{article.title}</h1>
-        <img src={article.image} alt="" />
+        <img src={article.image?.includes('//') ? `${article.image}` : `/${article.image}`} alt="Articles image" />
         <div className='user'>
-          <img src={article.authorImage} alt="" />
+          <img src={article.authorImage} alt="Author avatar" />
           <div className='user_info'>
             <span>{article.author}</span>
-            <p>Posted { dateFromNow(article.date) } days ago</p>
+            <p>Posted { dateFromNow(article.created_at) } days ago</p>
           </div>
           {(currentUser !== null && currentUser.username === article.author) && <div className='buttons'>
             <Link to={`/editor?edit=${article.url}`} state={article}>
@@ -66,11 +83,13 @@ const SingleArticle = (): JSX.Element => {
         </div>
         <p>
           Category: {article.category}
-          <br/>
-          Enum: {Category[article.id]}
-          {/* Remove id from instance when get data from backend */}
-          likes/ dislikes
         </p>
+        likes:{' '}
+        {article.likes}
+
+        <button onClick={handleClick}>Like</button>
+        <br></br>
+
         comments for all with opportunity to reply, date and user role (Comment form - Photo)
 
         <div>

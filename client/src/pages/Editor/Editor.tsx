@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { Category } from 'models/category';
 import dateToString from 'utils/helpers/date-to-string.helper';
 import './Editor.styles.scss';
 import ArticleService from 'services/article';
@@ -9,16 +8,18 @@ import { axiosInstance } from 'utils/axios';
 
 const Editor = (): JSX.Element => {
   const state = useLocation().state;
-  const [value, setValue] = useState(state.description ?? '');
   const [title, setTitle] = useState(state.title ?? '');
+  const [description, setDescription] = useState(state.desription ?? '');
   const [image, setImage] = useState();
-  const [category, setCategory] = useState(state.category ?? '');
+  const [categories, setCategories] = useState();
+  const [category, setCategory] = useState(state.category ?? 0);
 
   const upload = async (): Promise<void> => {
     try {
       const formData = new FormData();
       formData.append('image', image);
-      await axiosInstance.post('/upload', formData);
+      const response = await axiosInstance.post('/upload', formData);
+      return response.data;
     } catch (error) {
       console.log(error);
     }
@@ -27,7 +28,20 @@ const Editor = (): JSX.Element => {
   const descriptionDiv = useRef(null);
 
   useEffect(() => {
-    descriptionDiv.current.innerHTML = value;
+    descriptionDiv.current.innerHTML = description;
+
+    const fetchCategories = async (): Promise<void> => {
+      try {
+        const categories = await ArticleService.getCategories()
+        setCategories(categories);
+      } catch (error) {
+        console.log(error)
+
+        navigate('*')
+      }
+    }
+
+    fetchCategories();
   }, []);
 
   useEffect(() => {
@@ -47,14 +61,14 @@ const Editor = (): JSX.Element => {
 
   const handleClick = async (event: React.MouseEvent): Promise<void> => {
     event.preventDefault();
-    await upload();
+    const imageName = await upload();
+    console.log(imageName)
 
     try {
-      const categoryId = Category[category];
       const date = dateToString(new Date());
       state !== null
-        ? await ArticleService.updateArticle(state.id, [title, value])
-        : await ArticleService.createArticle({ title, value, image, categoryId, date });
+        ? await ArticleService.updateArticle(state.id, [title, description, imageName])
+        : await ArticleService.createArticle({ title, description, image, category, date });
 
       navigate('/');
     } catch (error) {
@@ -144,7 +158,7 @@ const Editor = (): JSX.Element => {
                   <label htmlFor="backColor">Highlight Color</label>
                 </div>
               </div>
-              <div id="text-input" ref={descriptionDiv} contentEditable="true" onInput={(event) => { setValue(event.currentTarget.innerHTML); }}></div>
+              <div id="text-input" ref={descriptionDiv} contentEditable="true" onInput={(event) => { setDescription(event.currentTarget.innerHTML); }}></div>
             </div>
           </div>
         </div>
@@ -177,10 +191,19 @@ const Editor = (): JSX.Element => {
           <h1>
             Category
           </h1>
-          <div className="category">
-            <input type="radio" checked={category === 'Art'} name="category" value="Art" id="Art" onChange={(event) => { setCategory(event.target.value); }} />
+          <ul>
+            {categories?.map((category) => (
+              <li key={category.id}>
+                <div className="category" key={category.id}>
+                  <input type="radio" name="cat" value={category.name} id="test" onChange={(event) => { setCategory(category.id); }}/>
+                  <label htmlFor={category.name}>{category.name}</label>
+                </div>
+              </li>
+            ))}
+          </ul>
+          {/* <div className="category">
+            <input type="radio" checked={category === 'Art'} name="category" value="Art" data-id={1} onChange={(event) => { setCategory(console.log(event.target.getAttribute('data-id'))); }} />
             <label htmlFor="Art">Art</label>
-            {/* Make for all the same tags */}
           </div>
           <div className="category">
             <input type="radio" name="cat" value="science" id="science"/>
@@ -189,19 +212,7 @@ const Editor = (): JSX.Element => {
           <div className="category">
             <input type="radio" name="cat" value="technology" id="technology"/>
             <label htmlFor="art">Technology</label>
-          </div>
-          <div className="category">
-            <input type="radio" name="cat" value="cinema" id="cinema"/>
-            <label htmlFor="art">Cinema</label>
-          </div>
-          <div className="category">
-            <input type="radio" name="cat" value="design" id="design"/>
-            <label htmlFor="art">Design</label>
-          </div>
-          <div className="category">
-            <input type="radio" name="cat" value="food" id="food"/>
-            <label htmlFor="art">Food</label>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

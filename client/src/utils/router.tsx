@@ -12,6 +12,7 @@ import SignIn from 'pages/SignIn/SignIn';
 import SignUp from 'pages/SignUp/SignUp';
 import Search from 'pages/Search/Search';
 import User from 'pages/User';
+import PrivacyPolicy from 'pages/PrivacyPolicy/PrivacyPolicy';
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +54,10 @@ export const router = createBrowserRouter([
   {
     path: routes.SignIn,
     element: <SignIn />
+  },
+  {
+    path: routes.PrivacyPolicy,
+    element: <PrivacyPolicy />
   },
   {
     path: routes.NotFound,

@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-
-import ArticleService from '../services/article'
 import { useNavigate } from 'react-router-dom';
 
 const SearchBar = () => {
@@ -51,21 +49,28 @@ const SearchBar = () => {
   };
 
   return (
-    <div className='search-bar'>
-        <input
-            ref={textInput}
-            type="text"
-            id="input"
-            name="input"
-            placeholder="Search.."
-            onChange={handleInput}
-        />
-        <button
+    <div className='search-bar' tabIndex={0}>
+        <form>
+          <input
+              ref={textInput}
+              type="search"
+              id="input"
+              name="input"
+              placeholder="Search.."
+              onChange={handleInput}
+          />
+          <button
+              type="submit"
+              onClick={findArticles}
+          > Search
+          </button>
+        </form>
+        {/* <button
             type="submit"
             onClick={findArticles}
         >
             <i className="fa fa-search"></i>
-        </button>
+        </button> */}
     </div>
   )
 }

@@ -27,9 +27,9 @@ const Interceptors = ({ children }) => {
           try {
             const response = await axiosInstanceTwo.get('/refresh');
 
-            const { username, newAccessToken } = response.data;
+            const { id, username, newAccessToken } = response.data;
             dispatch(setToken(newAccessToken));
-            setCurrentUser({ username }); // fix this bug (below setter too)
+            setCurrentUser({ id, username }); // fix this bug (below setter too)
             return await axiosInstance.request(previousRequest);
           } catch (error) {
             console.log(error);

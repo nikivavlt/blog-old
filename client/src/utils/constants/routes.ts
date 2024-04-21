@@ -7,5 +7,6 @@ export const routes = {
   SignIn: '/signin',
   SignUp: '/signup',
   ResetPassword: '/reset-password',
+  PrivacyPolicy: '/privacy-policy',
   NotFound: '*'
 }

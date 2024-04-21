@@ -10,7 +10,8 @@ const Search = () => {
     const queryString = location.search;
 
     const fetchArticle = async (): Promise<void> => {
-      const response = ArticleService.getArticlesByString(queryString);
+      const response = await ArticleService.getArticlesByString(queryString);
+      console.log(response)
     };
 
     fetchArticle();

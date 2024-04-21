@@ -39,12 +39,13 @@ class ArticleService {
   }
 
   async updateArticle(id: number, data) {
-    const [title, description] = data
+    const [title, description, image] = data
 
     try {
       const response = await axiosInstance.put(`/articles/${id}`, {
         title,
-        description
+        description,
+        image
       })
       return response.data
     } catch (error) {
@@ -67,6 +68,15 @@ class ArticleService {
       const response = await axiosInstance.get(`/search${queryString}`); // query string
       return response;
     } catch {
+      console.log(error)
+    }
+  }
+
+  async getCategories (): Promise<any> {
+    try {
+      const response = await axiosInstance.get('/categories')
+      return response.data
+    } catch (error) {
       console.log(error)
     }
   }
