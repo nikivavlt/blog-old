@@ -42,7 +42,7 @@ const Articles = ({ articles, getArticles }: IProps): JSX.Element => {
           (<div className='article' key={article.id}>
 
             <div className='article-image'>
-              <img src={article.image} alt="Article image" />
+              <img src={article.image?.includes('//') ? `${article.image}` : `/${article.image}`} alt="Articles image" />
             </div>
             <div className='content'>
               <Link className='link' to={`/articles/${article.url}`}>

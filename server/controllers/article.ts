@@ -1,5 +1,6 @@
 import { database } from '../config/database.js'
 import jwt from 'jsonwebtoken'
+import generateUrlSlug from '../utils/article-url.js';
 
 // Comments for TO DO - Good practice
 // SINGLE TASK FOR FUNCTION
@@ -43,13 +44,14 @@ export const getArticle = (request, response) => {
   const query = 'SELECT `username` as author, a.id as article_id, u.id as author_id, `title`, `description`, `url`, a.id, a.image, u.image AS authorImage, c.name AS category, `created_at` FROM users u JOIN articles a ON u.id=a.author_id JOIN categories c ON a.category_id=c.id WHERE a.url = ?'
   // check if article id required - send 400
   // if (!req?.body?.id) return res.status(400).json({ 'message': 'Employee ID required.' });
-
-  database.query(query, [request.params.url], (error, data) => { // HARDCODED request.params.url!!!
+  const url = String(request.params.url)
+  database.query(query, [url], (error, data) => { // HARDCODED request.params.url!!!
     if (error) return response.status(500).send(error);
     // 204 instead
     //   if (!employee) {
     //     return res.status(204).json({ "message": `No employee matches ID ${req.body.id}.` });
     // }
+    console.log(data)
     if (data.length === 0) return response.status(404).json('Article not found!')
     // implement different service and model
     const query = 'SELECT c.description, c.user_id, c.created_at, c.updated_at, u.username FROM comments c JOIN users u ON c.user_id=u.id WHERE c.article_id = ?';
@@ -67,26 +69,33 @@ export const getArticle = (request, response) => {
 export const createArticle = (request, response) => {
   // const currentDate = generateCurrentDate(new Date());
   // const articleUrl = generateArticleUrl(request.body.title);
-  const token = request.cookies.access_token
+  const token = request.cookies.refresh_token
 
   if (!token) return response.status(401).json('Not authenticated!')
 
-  jwt.verify(token, 'jwt', (error, userData) => {
+  jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (error, userData) => {
     if (error) return response.status(403).json('Token is not valid!')
 
     // generate articles url function
     // add is_admin boolean value or roles
     // rename image as avatar
 
-    const query = 'INSERT INTO articles(`title`, `description`, `image`, `category_id`, `date`, `author_id`) VALUES (?)'
+    const url = generateUrlSlug(request.body.title);
+
+    const query = 'INSERT INTO articles(`title`, `description`, `image`, `url`, `category_id`, `created_at`, `updated_at`, `author_id`, `likes`) VALUES (?)'
     // desctructure request.body object since you will use model instead this
+
+    // if category not selected - set default category
     const values = [
       request.body.title,
       request.body.description,
       request.body.image,
+      url,
       request.body.categoryId,
       request.body.date,
-      userData.id
+      request.body.date,
+      userData.id,
+      0 // hardcoded value
     ]
 
     // const values = {

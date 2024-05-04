@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "author": "nikivavlt",
   "description": "Web application development using Node.js.",
+  "private": true,
   "main": "server.js",
   "type": "module",
   "scripts": {

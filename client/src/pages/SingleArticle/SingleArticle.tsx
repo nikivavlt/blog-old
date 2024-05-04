@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-import Menu from 'components/Menu'
+import Menu from 'components/Menu/Menu'
 import { AuthContext } from 'context/AuthContext'
 import ArticleService from 'services/article'
 import './styles.scss'
@@ -98,7 +98,10 @@ const SingleArticle = (): JSX.Element => {
         </div>
       </div>
       <div className='menu'>
-        <Menu category={article.category}></Menu>
+        {article 
+          ? <Menu category={article.category} currentArticleId={article.article_id}></Menu>
+          : <Menu category={null} currentArticleId={null} ></Menu>
+        }
       </div>
     </div>
   )

@@ -8,11 +8,11 @@ import { axiosInstance } from 'utils/axios';
 
 const Editor = (): JSX.Element => {
   const state = useLocation().state;
-  const [title, setTitle] = useState(state.title ?? '');
-  const [description, setDescription] = useState(state.desription ?? '');
+  const [title, setTitle] = useState(state?.title ?? '');
+  const [description, setDescription] = useState(state?.desription ?? '');
   const [image, setImage] = useState();
   const [categories, setCategories] = useState();
-  const [category, setCategory] = useState(state.category ?? 0);
+  const [category, setCategory] = useState(state?.category ?? 0);
 
   const upload = async (): Promise<void> => {
     try {
@@ -61,14 +61,13 @@ const Editor = (): JSX.Element => {
 
   const handleClick = async (event: React.MouseEvent): Promise<void> => {
     event.preventDefault();
-    const imageName = await upload();
-    console.log(imageName)
+    const imageName: string = await upload();
 
     try {
       const date = dateToString(new Date());
       state !== null
         ? await ArticleService.updateArticle(state.id, [title, description, imageName])
-        : await ArticleService.createArticle({ title, description, image, category, date });
+        : await ArticleService.createArticle({ title, description, image: imageName, category, date });
 
       navigate('/');
     } catch (error) {
@@ -191,16 +190,12 @@ const Editor = (): JSX.Element => {
           <h1>
             Category
           </h1>
-          <ul>
-            {categories?.map((category) => (
-              <li key={category.id}>
-                <div className="category" key={category.id}>
-                  <input type="radio" name="cat" value={category.name} id="test" onChange={(event) => { setCategory(category.id); }}/>
-                  <label htmlFor={category.name}>{category.name}</label>
-                </div>
-              </li>
-            ))}
-          </ul>
+          {categories?.map((category) => (
+            <div className="category" key={category.id}>
+              <input type="radio" name="cat" value={category.name} id="test" onChange={(event) => { setCategory(category.id); }}/>
+              <label htmlFor={category.name}>{category.name}</label>
+            </div>
+          ))}
           {/* <div className="category">
             <input type="radio" checked={category === 'Art'} name="category" value="Art" data-id={1} onChange={(event) => { setCategory(console.log(event.target.getAttribute('data-id'))); }} />
             <label htmlFor="Art">Art</label>

@@ -6,6 +6,8 @@ import articleReducer from 'store/reducers/article'
 import { articleMiddleware } from 'store/middlewares/article'
 import type IArticle from 'models/article'
 
+
+// Make lazy loading for Redux store
 export interface IState {
   token: string
   articles: IArticle[]

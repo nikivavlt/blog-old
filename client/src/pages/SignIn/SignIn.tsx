@@ -66,6 +66,8 @@ const SignIn = ({ setToken }): JSX.Element => {
         {error && <p>{error}</p>}
 
         <span>
+          Don't you have an account?
+          {' '}
           <Link to='/signup'>
             Create account
           </Link>
