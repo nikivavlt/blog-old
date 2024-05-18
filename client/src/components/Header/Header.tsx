@@ -3,8 +3,8 @@ import { AuthContext } from 'context/AuthContext';
 import { Link } from 'react-router-dom';
 import Logotype from 'assets/images/logotype.svg';
 
-import './styles.scss';
-import SearchBar from 'components/SearchBar';
+import './Header.scss';
+import SearchBar from 'components/SearchBar/SearchBar';
 
 const Header = (): JSX.Element => {
   const { currentUser, signOut } = useContext(AuthContext);

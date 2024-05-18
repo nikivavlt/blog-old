@@ -1,2 +1,3 @@
-@import url('./variables/index.scss');
-// Category to connect index.scss with global.scss, variables, mixins and etc.. ..
+@use "fonts";
+@use "variables";
+@use "base";

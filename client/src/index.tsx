@@ -23,9 +23,5 @@ root.render(
   // </React.StrictMode>
 );
 
-// DELETE NOT NECESSARY DEPENDENCIES , WEB VITALS...
-// implement observer aka listener pattern
 // ADD COOKIES POP-Up
-// change lambda to functions
 // optimize redux store (action types, reducer, store, middlewares and pass as prop to component - connect)
-// lazyloading

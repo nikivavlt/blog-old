@@ -2,9 +2,9 @@ import React from 'react'
 import { RouterProvider } from 'react-router-dom'
 
 import { router } from 'utils/router'
-import './styles.scss'
+import './styles/index.scss';
 
-function App (props: any): JSX.Element {
+function App (): JSX.Element {
   return (
     <div className='app'>
       <div className='container'>
