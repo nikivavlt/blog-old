@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const axiosInstance = axios.create({
+const axiosInstanceOne = axios.create({
   baseURL: 'http://localhost:8080/',
   withCredentials: true,
   headers: {
@@ -11,6 +11,6 @@ const axiosInstance = axios.create({
 const axiosInstanceTwo = axios.create();
 
 export {
-  axiosInstance,
+  axiosInstanceOne,
   axiosInstanceTwo
 }; // axios instead of this

@@ -5,6 +5,11 @@ import './SignUp.scss'
 import UserService from 'services/users'
 import FormInput from 'components/FormInput/FormInput'
 
+
+// add google oauth 
+// https://www.youtube.com/watch?v=Kkht2mwSL_I
+// 3:14:24
+
 const SignUp = (): JSX.Element => {
   const [values, setValues] = useState({
     username: '',
@@ -13,7 +18,7 @@ const SignUp = (): JSX.Element => {
     confirmPassword: ''
   })
 
-  const [error, setError] = useState(null)
+  const [error, setError] = useState(null) // errorMessage, setErrorMessage
 
   const navigate = useNavigate()
 
@@ -70,14 +75,19 @@ const SignUp = (): JSX.Element => {
     event.preventDefault()
 
     try {
+      // setLoading(true)
+      // setErrorMessage (null)
       setValues({ username: '', email: '', password: '', confirmPassword: '' })
 
       // Write validations for backend
       await UserService.signUp(inputs.username, inputs.email, inputs.password)
-
+      // check if it suceessfully
+      // setLoading(false)
+      // if(signUp.ok) { move navigate here }
       navigate('/signin')
     } catch (error) {
       setError(error.response.data)
+      // setLoading(false)
     }
   }
 
@@ -104,9 +114,15 @@ const SignUp = (): JSX.Element => {
         label>
         <input required type='password' placeholder='Password' name='password' onChange={handleChange}/> */}
 
-        <button type='submit'>Sign up</button>
+        {/* disabled={loading}
+          { loading ? (
+            <div>Loading or spinner...</div>
+          ) : Sign Up}
+        */}
+        <button type='submit'>Sign Up</button> 
         {error && <p>{error}</p>}
 
+        {/* // Have an account? */}
         <span>
           Do you have an account? <Link to='/signin'>Sign in</Link>
         </span>

@@ -1,10 +1,10 @@
-import { axiosInstance } from 'utils/axios'
+import { axiosInstanceOne } from 'utils/axios'
 import type IArticle from 'models/article'
 
 class ArticleService {
   async getArticles (category: string): Promise<IArticle[]> {
     try {
-      const response = await axiosInstance.get(`/articles${category}`)
+      const response = await axiosInstanceOne.get(`/articles${category}`)
 
       return response.data
     } catch (error) {
@@ -14,7 +14,7 @@ class ArticleService {
 
   async getArticle (url: string): Promise <IArticle | never> {
     try {
-      const response = await axiosInstance.get(`/articles/${url}`)
+      const response = await axiosInstanceOne.get(`/articles/${url}`)
       return response.data
     } catch (error) {
       console.log(error)
@@ -24,8 +24,9 @@ class ArticleService {
   async createArticle(data: IArticle) {
     const { title, description, image, categoryId, date } = data
 
+    // use response ok/ sucess
     try {
-      const response = await axiosInstance.post('/articles/', {
+      const response = await axiosInstanceOne.post('/articles/', {
         title,
         description,
         image,
@@ -42,7 +43,7 @@ class ArticleService {
     const [title, description, image] = data
 
     try {
-      const response = await axiosInstance.put(`/articles/${id}`, {
+      const response = await axiosInstanceOne.put(`/articles/${id}`, {
         title,
         description,
         image
@@ -55,7 +56,7 @@ class ArticleService {
 
   async deleteArticle (url: string): Promise<void> {
     try {
-      await axiosInstance.delete(`/articles/${url}`)
+      await axiosInstanceOne.delete(`/articles/${url}`)
     } catch (error) {
       console.log(error)
     }
@@ -65,7 +66,7 @@ class ArticleService {
     // const queryValue = encodeURIComponent(searchString);
 
     try {
-      const response = await axiosInstance.get(`/search${queryString}`); // query string
+      const response = await axiosInstanceOne.get(`/search${queryString}`); // query string
       return response;
     } catch {
       console.log(error)
@@ -74,7 +75,7 @@ class ArticleService {
 
   async getCategories (): Promise<any> {
     try {
-      const response = await axiosInstance.get('/categories')
+      const response = await axiosInstanceOne.get('/categories')
       return response.data
     } catch (error) {
       console.log(error)

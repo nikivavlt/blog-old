@@ -1,18 +1,18 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import { routes } from 'utils/constants/routes';
-import Layout from 'components/Layout';
+import Layout from 'components/Layout/Layout';
 import Articles from 'pages/Articles/Articles';
 import Editor from 'pages/Editor/Editor';
-import NotFound from 'pages/NotFound';
+import NotFound from 'pages/NotFound/NotFound';
 import Primary from 'pages/Primary/Primary';
 import SignIn from 'pages/SignIn/SignIn';
 import SignUp from 'pages/SignUp/SignUp';
 import Search from 'pages/Search/Search';
-import User from 'pages/User';
+import User from 'pages/User/User';
 import PrivacyPolicy from 'pages/PrivacyPolicy/PrivacyPolicy';
-import SingleArticle from 'pages/SingleArticle/SingleArticle';
+import Dashboard from 'pages/Dashboard/Dashboard';
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +48,16 @@ export const router = createBrowserRouter([
       {
         path: routes.Editor,
         element: <Editor />
+      },
+      {
+        path: routes.Dashboard,
+        element: <Dashboard />,
+        children: [
+          {
+            path: '/dashboard',
+            element: <Dashboard />
+          }
+        ]
       }
     ]
   },

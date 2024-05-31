@@ -42,6 +42,8 @@ class User {
       callback(null, data[0]);
     });
   };
+
+  // findUserByUsername and findUserByEmail
 };
 
 export default User;

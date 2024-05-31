@@ -10,11 +10,12 @@ import authRoutes from './routes/authentication.js';
 import refreshRoute from './routes/refresh-token.js';
 import usersRoutes from './routes/users.js';
 import articlesRoutes from './routes/articles.js';
-import categoriesRoute from './routes/categories.js'
+import categoriesRoute from './routes/categories.js';
 import authMiddleware from './middlewares/authentication.js';
 import uploadRoute from './routes/upload.js';
 import searchRoute from './routes/search.js';
-import likesRoute from './routes/likes.js';
+import commentsRoutes from './routes/comments.js';
+import likesRoutes from './routes/likes.js';
 // import errorHandler from './middlewares/error.js';
 
 // absolute paths ? shortcut
@@ -48,12 +49,25 @@ app.use('/search', searchRoute);
 app.use('/users', usersRoutes);
 app.use('/articles', articlesRoutes);
 app.use('/categories', categoriesRoute);
-app.use('/likes', likesRoute);
+app.use('/comments', commentsRoutes);
+app.use('/likes', likesRoutes);
 
 //
 app.use('/upload', uploadRoute);
 
 // app.use(errorHandler);
+// app.use((error, request, response, next) => {
+//   const statusCode = error.statusCode || 500;
+//   const message = error.message || 'Internal server error';
+
+//   response.status(statusCode).json({
+//     sucess: false,
+//     statusCode,
+//     message
+//   })
+// })
+
+// !!! USE next instead of response in functions to handle errors
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}.`);

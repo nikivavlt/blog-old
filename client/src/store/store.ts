@@ -6,6 +6,9 @@ import articleReducer from 'store/reducers/article'
 import { articleMiddleware } from 'store/middlewares/article'
 import type IArticle from 'models/article'
 
+// use redux persist
+// https://www.youtube.com/watch?v=Kkht2mwSL_I
+// 3:07:00
 
 // Make lazy loading for Redux store
 export interface IState {

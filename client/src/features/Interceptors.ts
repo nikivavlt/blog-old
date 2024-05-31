@@ -1,15 +1,20 @@
-import React, { useContext, useMemo } from 'react';
+import type React from 'react';
+import { useContext, useMemo } from 'react';
 
 import { AuthContext } from 'context/AuthContext';
-import { axiosInstance, axiosInstanceTwo } from 'utils/axios';
+import { axiosInstanceOne, axiosInstanceTwo } from 'utils/axios';
 import { setToken } from 'store/actions/token';
 import store from 'store/store';
 
-const Interceptors = ({ children }) => {
+interface IComponentProps {
+  children: React.ReactNode
+}
+
+const Interceptors: React.FC<IComponentProps> = ({ children }): React.ReactNode => {
   const { setCurrentUser } = useContext(AuthContext);
 
   useMemo(() => { // useMemo???
-    axiosInstance.interceptors.request.use((config) => {
+    axiosInstanceOne.interceptors.request.use((config) => {
       const accessToken = store.getState().token;
 
       if (accessToken !== null) {
@@ -18,7 +23,7 @@ const Interceptors = ({ children }) => {
       return config;
     });
 
-    axiosInstance.interceptors.response.use((response) => response,
+    axiosInstanceOne.interceptors.response.use((response) => response,
       async (error) => {
         const previousRequest = error?.config;
         if (error.response.status === 401 && error.response.headers['auth-middleware']) { // don't HARDCODE destructure instead
@@ -30,7 +35,7 @@ const Interceptors = ({ children }) => {
             const { id, username, newAccessToken } = response.data;
             dispatch(setToken(newAccessToken));
             setCurrentUser({ id, username }); // fix this bug (below setter too)
-            return await axiosInstance.request(previousRequest);
+            return await axiosInstanceOne.request(previousRequest);
           } catch (error) {
             console.log(error);
           }

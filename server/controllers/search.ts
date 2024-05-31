@@ -1,6 +1,8 @@
 import database from '../config/database.js';
 
 const search = (request, response) => { //  Express automatically decodes request.query
+
+  // move it to articles?
   const pattern: string = request.query.inputQuery; // inputQuery, inputText, searchInput or just query
 
   const query = // DISTINCT - statement is used to return only different values (without duplicates)

@@ -7,6 +7,12 @@ import { AuthContext } from 'context/AuthContext';
 import { setToken } from 'store/actions/token';
 import { IState } from 'store/store';
 
+
+// add google oauth 
+// https://www.youtube.com/watch?v=Kkht2mwSL_I
+// 3:14:24
+
+
 // create service
 const SignIn = ({ setToken }): JSX.Element => {
   const [inputs, setInputs] = useState({
@@ -29,6 +35,7 @@ const SignIn = ({ setToken }): JSX.Element => {
   const handleSubmit = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
     try {
+      // check inputs before sending
       const userData = await signIn(inputs);
       console.log(userData);
       setToken(userData.token);
@@ -60,6 +67,7 @@ const SignIn = ({ setToken }): JSX.Element => {
         <input required type='text' id='username' placeholder='Username' name='username' onChange={handleChange} value={inputs.username}/>
 
         <label htmlFor='password'>Password</label>
+        {/* placeholder='******' */}
         <input required type='password' placeholder='Password' name='password' onChange={handleChange} value={inputs.password}/>
 
         <button type='submit'>Sign in</button>

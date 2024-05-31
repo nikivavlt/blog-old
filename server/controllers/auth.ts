@@ -9,6 +9,9 @@ import type express from 'express';
 const signUp = (request: express.Request, response: express.Response) => {
   //   Check if user exists in database
   const query = 'SELECT * FROM users WHERE email = ? OR username = ?';
+  // const one = await findUserByUsername(user.username);
+  // const two = await findUserByEmail(user.email); 
+  // USE THIS instead!
 
   database.query(query, [request.body.email, request.body.username], (error, data) => {
     // check if it has all necessary fields (password, username ...) - return 400
@@ -23,10 +26,20 @@ const signUp = (request: express.Request, response: express.Response) => {
       // ....
     } = request.body;
 
+    if (
+      !username || 
+      !password || 
+      !email || 
+      username === '' ||
+      password === '' || 
+      email === '') {
+      return response.status(400).json('All fields are required'); // next (errorHandler)
+    }
+
     // Hash the password and create user CREATE SERVICE
     const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(request.body.password, salt); // change request.body to destructured object and name
-    // passwordHash
+    const hashedPassword = bcrypt.hashSync(request.body.password, salt); // change request.body to destructured object and name
+    // passwordHash or hashedPassword
 
     // add refresh token inside database
     // add role
@@ -36,13 +49,15 @@ const signUp = (request: express.Request, response: express.Response) => {
     const values = [
       request.body.username,
       request.body.email,
-      hash
+      hashedPassword
     ];
 
+    // rewrite it using try ... catch
     database.query(query, [values], (error, data) => {
       if (error) return response.json(error);
+      // next error
 
-      return response.status(200).json('User has been created.'); // send username
+      return response.status(200).json('User has been created.'); // 'User created succesfful', send username
     });
   });
 };

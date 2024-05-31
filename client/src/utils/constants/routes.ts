@@ -8,5 +8,6 @@ export const routes = {
   SignUp: '/signup',
   ResetPassword: '/reset-password',
   PrivacyPolicy: '/privacy-policy',
+  Dashboard: '/dashboard',
   NotFound: '*'
-}
+};

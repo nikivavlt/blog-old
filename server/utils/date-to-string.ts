@@ -1,4 +1,4 @@
-const generateCurrentDate = (date: Date) => (
+const dateToString = (date: Date) => (
     `${date.getFullYear()}-${
       (`00${date.getMonth() + 1}`).slice(-2)}-${
       (`00${date.getDate()}`).slice(-2)} ${
@@ -7,4 +7,4 @@ const generateCurrentDate = (date: Date) => (
       (`00${date.getSeconds()}`).slice(-2)}`
 );
 
-export default generateCurrentDate;
+export default dateToString;

@@ -3,13 +3,14 @@ import { useLocation } from 'react-router-dom'
 
 import ArticleService from '../../services/article'
 
-const Search = () => {
+const Search = (): JSX.Element => {
   const location = useLocation();
 
   useEffect(() => {
     const queryString = location.search;
 
     const fetchArticle = async (): Promise<void> => {
+      // try catch
       const response = await ArticleService.getArticlesByString(queryString);
       console.log(response)
     };

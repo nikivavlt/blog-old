@@ -1,11 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { Provider } from 'react-redux'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 
-import App from 'App'
-import { AuthContextProvider } from 'context/AuthContext'
-import store from 'store/store'
-import Interceptors from 'features/Interceptors'
+import App from 'App';
+import { AuthContextProvider } from 'context/AuthContext';
+import store from 'store/store';
+import Interceptors from 'features/Interceptors';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

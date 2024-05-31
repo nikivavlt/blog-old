@@ -1,12 +1,17 @@
 import { database } from '../config/database.js'
 import jwt from 'jsonwebtoken'
-import generateUrlSlug from '../utils/article-url.js';
+import generateUrlSlug from '../utils/slug-generator.js';
 
 // Comments for TO DO - Good practice
 // SINGLE TASK FOR FUNCTION
 // In JavaScript && operator returns the first value if it's falsy or the second one if not.
 export const getArticles = (request, response) => {
 
+  // add this one to qery
+  const startIndex = parseInt(request.query.startIndex) || 0;
+  const endIndex = parseInt(request.query.endIndex) || 8;
+  const sortDirection = request.query.order === 'ascending' ? 1 : -1;
+  
   const { category } = request.query;
 
   // Article.getArticles((error, data) => {
@@ -51,10 +56,9 @@ export const getArticle = (request, response) => {
     //   if (!employee) {
     //     return res.status(204).json({ "message": `No employee matches ID ${req.body.id}.` });
     // }
-    console.log(data)
     if (data.length === 0) return response.status(404).json('Article not found!')
     // implement different service and model
-    const query = 'SELECT c.description, c.user_id, c.created_at, c.updated_at, u.username FROM comments c JOIN users u ON c.user_id=u.id WHERE c.article_id = ?';
+    const query = 'SELECT c.content, c.user_id, c.created_at, c.updated_at, u.username FROM comments c JOIN users u ON c.user_id=u.id WHERE c.article_id = ?';
 
     database.query(query, data[0].id, (error, commentsData) => {
       if (error) return response.status(500).send(error);
@@ -72,6 +76,10 @@ export const createArticle = (request, response) => {
   const token = request.cookies.refresh_token
 
   if (!token) return response.status(401).json('Not authenticated!')
+
+  if (!request.body.title || !request.body.description) { // add all others fields
+    // return next(errorHandler(400, 'Please provide all required fields'));
+  }
 
   jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (error, userData) => {
     if (error) return response.status(403).json('Token is not valid!')
@@ -94,7 +102,7 @@ export const createArticle = (request, response) => {
       request.body.categoryId,
       request.body.date,
       request.body.date,
-      userData.id,
+      userData?.id,
       0 // hardcoded value
     ]
 

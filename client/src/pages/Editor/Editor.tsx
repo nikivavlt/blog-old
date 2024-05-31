@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import dateToString from 'utils/helpers/date-to-string.helper';
 import './Editor.styles.scss';
 import ArticleService from 'services/article';
-import { axiosInstance } from 'utils/axios';
+import { axiosInstanceOne } from 'utils/axios';
 
 const Editor = (): JSX.Element => {
   const state = useLocation().state;
@@ -18,7 +18,7 @@ const Editor = (): JSX.Element => {
     try {
       const formData = new FormData();
       formData.append('image', image);
-      const response = await axiosInstance.post('/upload', formData);
+      const response = await axiosInstanceOne.post('/upload', formData);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -28,6 +28,7 @@ const Editor = (): JSX.Element => {
   const descriptionDiv = useRef(null);
 
   useEffect(() => {
+    console.log(description)
     descriptionDiv.current.innerHTML = description;
 
     const fetchCategories = async (): Promise<void> => {
@@ -42,7 +43,7 @@ const Editor = (): JSX.Element => {
     }
 
     fetchCategories();
-  }, []);
+  }, [description]);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -64,7 +65,7 @@ const Editor = (): JSX.Element => {
     const imageName: string = await upload();
 
     try {
-      const date = dateToString(new Date());
+      const date = dateToString(new Date()); // move to backend
       state !== null
         ? await ArticleService.updateArticle(state.id, [title, description, imageName])
         : await ArticleService.createArticle({ title, description, image: imageName, category, date });

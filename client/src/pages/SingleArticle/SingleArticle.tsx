@@ -9,6 +9,7 @@ import dateFromNow from 'utils/helpers/date-from-now.helper'
 import type IArticle from 'models/article'
 import cleanHTML from 'utils/helpers/clean-html'
 import { getLikes, addLike } from 'services/likes'
+import CommentSection from 'components/CommentSection/CommentSection'
 // import { Edit } from '../../assets/images/edit.png' - this case
 
 const SingleArticle = (): JSX.Element => {
@@ -19,6 +20,11 @@ const SingleArticle = (): JSX.Element => {
   const { currentUser } = useContext(AuthContext)
 
   const articleUrl = location.pathname.split('/')[2]
+
+  const fetchLikes = async(id) => {
+    const likes = await getLikes(id);
+    return likes;
+  }
 
   useEffect(() => {
     const fetchArticle = async (): Promise<void> => {
@@ -38,18 +44,22 @@ const SingleArticle = (): JSX.Element => {
       }
     }
 
-    const fetchLikes = async(id) => {
-      const likes = await getLikes(id);
-      return likes;
-    }
-
     fetchArticle()
     // wrong implementation 2 async one after one
   }, [articleUrl])
 
-  const handleClick = async () => {
+  const handleLike = async () => {
     const likeResponse = await addLike(article.article_id, currentUser.id);
     console.log(likeResponse);
+
+    if (likeResponse.status === 200) {
+      const likes = await fetchLikes(article.article_id);
+
+      setArticle((previousState) => ({
+        ...previousState,
+        likes: likes.count,
+      }));
+    }
   };
 
   const handleDelete = async (): Promise<void> => {
@@ -87,7 +97,7 @@ const SingleArticle = (): JSX.Element => {
         likes:{' '}
         {article.likes}
 
-        <button onClick={handleClick}>Like</button>
+        <button onClick={handleLike}>Like</button>
         <br></br>
 
         comments for all with opportunity to reply, date and user role (Comment form - Photo)
@@ -95,6 +105,7 @@ const SingleArticle = (): JSX.Element => {
         <div>
           Description:
           <p dangerouslySetInnerHTML={{ __html: cleanHTML(article.description) }}></p>
+          <CommentSection articleId={article.article_id} />
         </div>
       </div>
       <div className='menu'>

@@ -1,7 +1,7 @@
-import React from 'react'
-import { RouterProvider } from 'react-router-dom'
+import React from 'react';
+import { RouterProvider } from 'react-router-dom';
 
-import { router } from 'utils/router'
+import { router } from 'utils/router';
 import './styles/index.scss';
 
 function App (): JSX.Element {
@@ -11,7 +11,8 @@ function App (): JSX.Element {
         <RouterProvider router={router} />
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
+

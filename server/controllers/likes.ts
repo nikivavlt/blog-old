@@ -1,7 +1,8 @@
 import { database } from '../config/database.js'
+import dateToString from '../utils/date-to-string.js';
 
 const getLikes = (request, response) => {
-  const query = 'SELECT COUNT(*) as count FROM likes WHERE article_id = ?'
+  const query = 'SELECT COUNT(*) as count FROM likes WHERE `liked_type` = "Article" AND liked_id = ?'
   // check if article id required - send 400
   // if (!req?.body?.id) return res.status(400).json({ 'message': 'Employee ID required.' });
   
@@ -18,7 +19,7 @@ const getLikes = (request, response) => {
 };
 
 const removeLike = (callback, article_id, user_id) => {
-  const query = 'DELETE FROM likes WHERE `article_id` = ? AND `user_id` = ?';
+  const query = 'DELETE FROM likes WHERE `liked_type` = "Article" AND `liked_id` = ? AND `user_id` = ?';
 
   database.query(query, [article_id, user_id], (error, data) => { // HARDCODED request.params.url!!!
     // 204 instead
@@ -33,12 +34,15 @@ const removeLike = (callback, article_id, user_id) => {
   });
 }
 
+// toggleLike
 const addLike = (request, response) => {
   const { article_id, user_id } = request.body
 
-  const query = 'INSERT INTO likes(`article_id`, `user_id`) VALUES (?)';
+  const currentDate = dateToString(new Date());
 
-  database.query(query, [[article_id, user_id]], (error, data) => { // HARDCODED request.params.url!!!
+  const query = 'INSERT INTO likes(`liked_id`, `user_id`, `created_at`) VALUES (?)';
+
+  database.query(query, [[article_id, user_id, currentDate]], (error, data) => { // HARDCODED request.params.url!!!
     if (error?.errno) {
       if (error.errno === 1062) {
         removeLike((sqlError, data) => {
